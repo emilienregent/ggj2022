@@ -1,0 +1,52 @@
+Créer dépôt github
+[Jérôme] Mettre en place l'architecture FSM
+Menu
+	=> Overlay ?
+	=> Scènes superposés ?
+Phase de jeu Pac Man
+	=> [Emilien] Fantômes
+		=> L'IA des fantômes => https://www.todayifoundout.com/index.php/2015/10/ghosts-pac-man-work/
+			=> Patrouiller
+			=> Manger Pac Man
+			=> Fuir Pac Man
+		=> Modification des stats selon la progression de Pac Man (vitesse du fantôme rouge)
+		=> Manger le Pac Man
+			=> Condition de défaite (switch vers phase Fantôme)
+	=> [Jérôme] Labyrinthe
+		=> Intégration de blocs 3D pour construire le niveau de Pac Man
+		=> Téléportation gauche droite en sortant de la map
+		=> Apparition des patilles + Power UP
+		=> Apparition random des fruits
+		=> Respawn fantômes
+	=> [Gaëtan] Joueur (Pac Man)
+		=> Navigation joueur
+			=> Déplacement automatique
+			=> Changement de direction grâce aux inputs
+		=> Pastille
+			=> Comptabilisation du score
+		=> Power UP
+			=> Possible de manger les fantômes
+	=> Game Manager
+		=> Augmentation de la difficulté à mesure que le joueur se rapproche de la victoire
+			=> Impossibilié de gagner
+Phase de jeu Fantôme
+	=> Fantômes
+		=> Reprendre la même chose que la phase Pac Man
+	=> Joueur (Fantôme)
+		=> Déplacement
+			=> Etape 1 : reprendre le même comportement que le joueur Pac Man
+			=> Etape 2 (s'il y a du temps) : ne déplacer le joueur que lorsqu'il utilise les inputs, plus de déplacement automatique
+		=> Manger les autres fantômes
+			=> Respawn comme si c'était le Pac Man qui l'avait mangé
+		=> Manger le Pac Man
+			=> Condition de défaite (switch vers phase Pac Man)
+	=> Pac Man
+		=> IA qui calque les possibilités du joueur
+			=> Déplacements
+			=> Manger les pastilles
+				=> Si toutes les pastilles sont mangées = condition de victoire
+			=> Manger les power up
+Ecran de victoire
+	=> Bravo !
+Sound Effects + Musique
+Graphismes (intégration des assets)
