@@ -5,6 +5,7 @@ using UnityEngine;
 public class NodeController : MonoBehaviour
 {
 
+    public GameObject Center;
     
     private bool _canMoveTop = false;
     private bool _canMoveRight = false;

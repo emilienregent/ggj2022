@@ -70,7 +70,7 @@ public class MovementController : MonoBehaviour
     private void SetNewDestination(NodeController destination)
     {
         DestinationNode = destination;
-        Agent.SetDestination(destination.gameObject.transform.position);
+        Agent.SetDestination(destination.Center.gameObject.transform.position);
     }
 
     private NodeController FindNextNode(DirectionEnum direction)
