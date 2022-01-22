@@ -13,12 +13,12 @@ public class MovementController : MonoBehaviour
     private DirectionEnum _currentDirection;
     private DirectionEnum _nextDirection;
     private NodeController _destinationNode;
-    private NavMeshAgent _agent;
+    private NodeController _currentNode;
 
     public DirectionEnum CurrentDirection { get => _currentDirection; set => _currentDirection = value; }
     public DirectionEnum NextDirection { get => _nextDirection; set => _nextDirection = value; }
-    public NavMeshAgent Agent { get => _agent; set => _agent = value; }
     public NodeController DestinationNode { get => _destinationNode; set => _destinationNode = value; }
+    public NodeController CurrentNode { get => _currentNode; set => _currentNode = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -26,16 +26,19 @@ public class MovementController : MonoBehaviour
         CurrentDirection = DirectionEnum.Left;
         NextDirection = DirectionEnum.Left;
 
-        Agent = GetComponent<NavMeshAgent>();
+        CurrentNode = StartingNode;
 
-        SetNewDestination(StartingNode.NodeLeft);
+        EvaluateNextDirection();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        if(Agent.pathStatus == NavMeshPathStatus.PathComplete)
+
+        transform.position = Vector3.MoveTowards(transform.position, DestinationNode.gameObject.transform.position, Speed * Time.deltaTime);
+        if (transform.position.x == DestinationNode.gameObject.transform.position.x && transform.position.y == DestinationNode.gameObject.transform.position.y && transform.position.z == DestinationNode.gameObject.transform.position.z)
         {
+            CurrentNode = DestinationNode;
             EvaluateNextDirection();
         }
 
@@ -66,13 +69,12 @@ public class MovementController : MonoBehaviour
     public void SetNextDirection(DirectionEnum newDirection)
     {
         NextDirection = newDirection;
-        EvaluateNextDirection();
     }
 
     private void SetNewDestination(NodeController destination)
     {
         DestinationNode = destination;
-        Agent.SetDestination(destination.Center.gameObject.transform.position);
+        transform.LookAt(DestinationNode.gameObject.transform);
     }
 
     private NodeController FindNextNode(DirectionEnum direction)
@@ -82,30 +84,30 @@ public class MovementController : MonoBehaviour
         switch (direction)
         {
             case DirectionEnum.Top:
-                if (DestinationNode.CanMoveTop == true)
+                if (CurrentNode.CanMoveTop == true)
                 {
-                    destination = DestinationNode.NodeTop;
+                    destination = CurrentNode.NodeTop;
                 }
                 break;
 
             case DirectionEnum.Right:
-                if (DestinationNode.CanMoveRight == true)
+                if (CurrentNode.CanMoveRight == true)
                 {
-                    destination = DestinationNode.NodeRight;
+                    destination = CurrentNode.NodeRight;
                 }
                 break;
 
             case DirectionEnum.Bottom:
-                if (DestinationNode.CanMoveBottom == true)
+                if (CurrentNode.CanMoveBottom == true)
                 {
-                    destination = DestinationNode.NodeBottom;
+                    destination = CurrentNode.NodeBottom;
                 }
                 break;
 
             case DirectionEnum.Left:
-                if (DestinationNode.CanMoveLeft == true)
+                if (CurrentNode.CanMoveLeft == true)
                 {
-                    destination = DestinationNode.NodeLeft;
+                    destination = CurrentNode.NodeLeft;
                 }
                 break;
         }
