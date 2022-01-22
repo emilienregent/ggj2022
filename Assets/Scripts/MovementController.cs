@@ -34,12 +34,14 @@ public class MovementController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        transform.position = Vector3.MoveTowards(transform.position, DestinationNode.gameObject.transform.position, Speed * Time.deltaTime);
-        if (transform.position.x == DestinationNode.gameObject.transform.position.x && transform.position.y == DestinationNode.gameObject.transform.position.y && transform.position.z == DestinationNode.gameObject.transform.position.z)
+        if(DestinationNode != null)
         {
-            CurrentNode = DestinationNode;
-            EvaluateNextDirection();
+            transform.position = Vector3.MoveTowards(transform.position, DestinationNode.gameObject.transform.position, Speed * Time.deltaTime);
+            if (transform.position.x == DestinationNode.gameObject.transform.position.x && transform.position.y == DestinationNode.gameObject.transform.position.y && transform.position.z == DestinationNode.gameObject.transform.position.z)
+            {
+                CurrentNode = DestinationNode;
+                EvaluateNextDirection();
+            }
         }
 
     }
