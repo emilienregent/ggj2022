@@ -32,12 +32,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_0b7dc899ce07464e9671d941f800bc64: 0.9
-    - Vector1_2251a8a60ccb48238d92f238babdc490: 0.05
+    - Vector1_0b7dc899ce07464e9671d941f800bc64: 0.8
+    - Vector1_2251a8a60ccb48238d92f238babdc490: 0.15
     m_Colors:
     - Color_0c403efbcb6a4c2b87046810346b89dc: {r: 0.7075472, g: 0.0500623, b: 0.1387066, a: 0}
     - Color_d46c915ee5c84533b399fbde64750f35: {r: 2.100958, g: 0, b: 3.120842, a: 0}
-    - Vector2_e369da9533b24884a87929ee6560cc8f: {r: 2, g: 2, b: 0, a: 0}
+    - Vector2_e369da9533b24884a87929ee6560cc8f: {r: 20, g: 20, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &1297273863581915049
 MonoBehaviour:
