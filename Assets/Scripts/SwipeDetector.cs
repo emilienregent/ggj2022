@@ -95,21 +95,25 @@ public class SwipeDetector : MonoBehaviour
     public void OnSwipeUp()
     {
         Debug.Log("Swipe UP");
-    }
-
-    public void OnSwipeDown()
-    {
-        Debug.Log("Swipe Down");
-    }
-
-    public void OnSwipeLeft()
-    {
-        Debug.Log("Swipe Left");
+        OnSwipeUpAction();
     }
 
     public void OnSwipeRight()
     {
         Debug.Log("Swipe Right");
+        OnSwipeRightAction();
+    }
+
+    public void OnSwipeDown()
+    {
+        Debug.Log("Swipe Down");
+        OnSwipeDownAction();
+    }
+
+    public void OnSwipeLeft()
+    {
+        Debug.Log("Swipe Left");
+        OnSwipeLeftAction();
     }
 
     public event Action OnSwipeUpHandler;
