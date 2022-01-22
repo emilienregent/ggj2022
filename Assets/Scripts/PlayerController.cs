@@ -5,40 +5,40 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private MovementController _movementController;
-    private SwipeDetector _swipeDetector;
+    private MovementController _playerMovementController;
+    private SwipeDetector _playerSwipeDetector;
 
-    public MovementController MovementController { get => _movementController; set => _movementController = value; }
-    public SwipeDetector SwipeDetector { get => _swipeDetector; set => _swipeDetector = value; }
+    public MovementController PlayerMovementController { get => _playerMovementController; set => _playerMovementController = value; }
+    public SwipeDetector PlayerSwipeDetector { get => _playerSwipeDetector; set => _playerSwipeDetector = value; }
 
     private void Awake()
     {
-        MovementController = GetComponent<MovementController>();
+        PlayerMovementController = GetComponent<MovementController>();
 
-        if(MovementController == null)
+        if(PlayerMovementController == null)
         {
             Debug.LogError("No MovementController found in the Player's components");
         }
 
-        SwipeDetector = GetComponent<SwipeDetector>();
+        PlayerSwipeDetector = GetComponent<SwipeDetector>();
 
-        if(SwipeDetector == null)
+        if(PlayerSwipeDetector == null)
         {
             Debug.LogError("No SwipeDetector found in the Player's components");
         }
 
-        SwipeDetector.OnSwipeUpHandler += SetNextDirectionToTop;
-        SwipeDetector.OnSwipeRightHandler += SetNextDirectionToRight;
-        SwipeDetector.OnSwipeDownHandler += SetNextDirectionToBottom;
-        SwipeDetector.OnSwipeLeftHandler += SetNextDirectionToLeft;
+        PlayerSwipeDetector.OnSwipeUpHandler += SetNextDirectionToTop;
+        PlayerSwipeDetector.OnSwipeRightHandler += SetNextDirectionToRight;
+        PlayerSwipeDetector.OnSwipeDownHandler += SetNextDirectionToBottom;
+        PlayerSwipeDetector.OnSwipeLeftHandler += SetNextDirectionToLeft;
     }
 
     private void OnDestroy()
     {
-        SwipeDetector.OnSwipeUpHandler -= SetNextDirectionToTop;
-        SwipeDetector.OnSwipeRightHandler -= SetNextDirectionToRight;
-        SwipeDetector.OnSwipeDownHandler -= SetNextDirectionToBottom;
-        SwipeDetector.OnSwipeLeftHandler -= SetNextDirectionToLeft;
+        PlayerSwipeDetector.OnSwipeUpHandler -= SetNextDirectionToTop;
+        PlayerSwipeDetector.OnSwipeRightHandler -= SetNextDirectionToRight;
+        PlayerSwipeDetector.OnSwipeDownHandler -= SetNextDirectionToBottom;
+        PlayerSwipeDetector.OnSwipeLeftHandler -= SetNextDirectionToLeft;
     }
 
     // Start is called before the first frame update
@@ -55,21 +55,21 @@ public class PlayerController : MonoBehaviour
 
     private void SetNextDirectionToTop()
     {
-        MovementController.NextDirection = DirectionEnum.Top;
+        PlayerMovementController.SetNextDirection(DirectionEnum.Top);
     }
 
     private void SetNextDirectionToRight()
     {
-        MovementController.NextDirection = DirectionEnum.Right;
+        PlayerMovementController.SetNextDirection(DirectionEnum.Right);
     }
 
     private void SetNextDirectionToBottom()
     {
-        MovementController.NextDirection = DirectionEnum.Bottom;
+        PlayerMovementController.SetNextDirection(DirectionEnum.Bottom);
     }
 
     private void SetNextDirectionToLeft()
     {
-        MovementController.NextDirection = DirectionEnum.Left;
+        PlayerMovementController.SetNextDirection(DirectionEnum.Left);
     }
 }

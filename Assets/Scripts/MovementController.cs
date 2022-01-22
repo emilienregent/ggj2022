@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum DirectionEnum { None, Top, Right, Bottom, Left};
+public enum DirectionEnum { Top, Right, Bottom, Left};
 public class MovementController : MonoBehaviour
 {
 
@@ -24,7 +24,7 @@ public class MovementController : MonoBehaviour
     void Start()
     {
         CurrentDirection = DirectionEnum.Left;
-        NextDirection = DirectionEnum.None;
+        NextDirection = DirectionEnum.Left;
 
         Agent = GetComponent<NavMeshAgent>();
 
@@ -34,31 +34,39 @@ public class MovementController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(Agent.pathStatus == NavMeshPathStatus.PathComplete || Agent.remainingDistance < 0.1f)
+        if(Agent.pathStatus == NavMeshPathStatus.PathComplete)
         {
-            NodeController destination;
-
-            // Get new destination
-            if(NextDirection != DirectionEnum.None)
-            {
-                destination = FindNextNode(NextDirection);
-                if(destination == null)
-                {
-                    destination = FindNextNode(CurrentDirection);
-                }
-            } else
-            {
-                destination = FindNextNode(CurrentDirection);
-            }
-
-            if(destination != null)
-            {
-                SetNewDestination(destination);
-            }
+            EvaluateNextDirection();
         }
 
+    }
 
+    public void EvaluateNextDirection()
+    {
+        // If we can go to the wanted direction, we go with it
+        NodeController destination = FindNextNode(NextDirection);
+        if (destination != null)
+        {
+            // We update the current direction since we can go in the direction we want
+            CurrentDirection = NextDirection;
+        }
+        else
+        {
+            // There is no node available in the direction we wanted, so we keep going in the current direction
+            destination = FindNextNode(CurrentDirection);
+        }
 
+        // If we have found a destination, we go there
+        if (destination != null)
+        {
+            SetNewDestination(destination);
+        }
+    }
+
+    public void SetNextDirection(DirectionEnum newDirection)
+    {
+        NextDirection = newDirection;
+        EvaluateNextDirection();
     }
 
     private void SetNewDestination(NodeController destination)
