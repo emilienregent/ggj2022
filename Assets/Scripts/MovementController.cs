@@ -54,12 +54,6 @@ public class MovementController : MonoBehaviour
             if(destination != null)
             {
                 SetNewDestination(destination);
-
-            // Fake movement input
-            } else
-            {
-                DirectionEnum[] availableDirections = new DirectionEnum[4] { DirectionEnum.Top, DirectionEnum.Right, DirectionEnum.Bottom, DirectionEnum.Left };
-                NextDirection = availableDirections[Random.Range(0, availableDirections.Length)];
             }
         }
 
