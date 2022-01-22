@@ -8,7 +8,7 @@ public class pickup : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Pacman"))
         {
-            Destroy(this.gameObject);
+            GameObject.Destroy(gameObject);
         }
     }
 
