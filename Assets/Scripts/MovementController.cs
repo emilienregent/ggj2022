@@ -1,12 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public enum DirectionEnum { Top, Right, Bottom, Left};
+public enum DirectionEnum
+{
+    None = 0,
+
+    Top = 1 << 0, // 1
+    Right = 1 << 1, // 2
+    Bottom = 1 << 2, // 4
+    Left = 1 << 3, // 8
+
+    Horizontal = Left | Right, // 10
+    Vertical = Top | Bottom // 5
+};
+
 public class MovementController : MonoBehaviour
 {
-
     public float Speed = 4f;
     public NodeController StartingNode;
 
@@ -43,26 +51,22 @@ public class MovementController : MonoBehaviour
                 EvaluateNextDirection();
             }
         }
-
     }
 
-    public void EvaluateNextDirection()
+    public virtual void EvaluateNextDirection()
     {
+        NodeController destination;
+
         // If we can go to the wanted direction, we go with it
-        NodeController destination = FindNextNode(NextDirection);
-        if (destination != null)
+        if (TryGetNextNode(NextDirection, out destination))
         {
             // We update the current direction since we can go in the direction we want
             CurrentDirection = NextDirection;
-        }
-        else
-        {
-            // There is no node available in the direction we wanted, so we keep going in the current direction
-            destination = FindNextNode(CurrentDirection);
-        }
 
-        // If we have found a destination, we go there
-        if (destination != null)
+            SetNewDestination(destination);
+        }
+        // There is no node available in the direction we wanted, so we keep going in the current direction
+        else if (TryGetNextNode(CurrentDirection, out destination))
         {
             SetNewDestination(destination);
         }
@@ -79,9 +83,14 @@ public class MovementController : MonoBehaviour
         transform.LookAt(DestinationNode.gameObject.transform);
     }
 
-    private NodeController FindNextNode(DirectionEnum direction)
+    public bool TryGetNextNode(DirectionEnum direction, out NodeController destination)
     {
-        NodeController destination = null;
+        destination = null;
+
+        if (direction == DirectionEnum.None)
+        {
+            return false;
+        }
 
         switch (direction)
         {
@@ -89,6 +98,7 @@ public class MovementController : MonoBehaviour
                 if (CurrentNode.CanMoveTop == true)
                 {
                     destination = CurrentNode.NodeTop;
+                    return true;
                 }
                 break;
 
@@ -96,6 +106,7 @@ public class MovementController : MonoBehaviour
                 if (CurrentNode.CanMoveRight == true)
                 {
                     destination = CurrentNode.NodeRight;
+                    return true;
                 }
                 break;
 
@@ -103,6 +114,7 @@ public class MovementController : MonoBehaviour
                 if (CurrentNode.CanMoveBottom == true)
                 {
                     destination = CurrentNode.NodeBottom;
+                    return true;
                 }
                 break;
 
@@ -110,10 +122,11 @@ public class MovementController : MonoBehaviour
                 if (CurrentNode.CanMoveLeft == true)
                 {
                     destination = CurrentNode.NodeLeft;
+                    return true;
                 }
                 break;
         }
 
-        return destination;
+        return false;
     }
 }
