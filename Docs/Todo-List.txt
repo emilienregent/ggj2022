@@ -20,8 +20,9 @@ Phase de jeu Pac Man
 		=> Respawn fantômes
 	=> [Gaëtan] Joueur (Pac Man)
 		=> Navigation joueur
-			=> Déplacement automatique
-			=> Changement de direction grâce aux inputs
+			=> [DONE] Déplacement automatique
+			=> [DONE] Changement de direction grâce aux inputs
+			=> Feedback visuel sur la direction courante
 		=> Pastille
 			=> Comptabilisation du score
 		=> Power UP
