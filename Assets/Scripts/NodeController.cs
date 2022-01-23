@@ -25,7 +25,7 @@ public class NodeController : MonoBehaviour
     /// </summary>
     public bool IsCorner { get { return _directionCount == 2 && _directionMask != (int)DirectionEnum.Horizontal && _directionMask != (int)DirectionEnum.Vertical; } }
     /// <summary>
-    /// A direction is a node with more than 2 directions
+    /// An intersection is a node with more than 2 directions
     /// </summary>
     public bool IsIntersection { get { return _directionCount > 2; } }
 
