@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
     public MovementController PlayerMovementController { get => _playerMovementController; set => _playerMovementController = value; }
     public SwipeDetector PlayerSwipeDetector { get => _playerSwipeDetector; set => _playerSwipeDetector = value; }
+
+    public InputUIController PlayerUIController;
 
     private void Awake()
     {
@@ -27,37 +30,69 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("No SwipeDetector found in the Player's components");
         }
 
-        PlayerSwipeDetector.OnSwipeUpHandler += SetNextDirectionToTop;
-        PlayerSwipeDetector.OnSwipeRightHandler += SetNextDirectionToRight;
-        PlayerSwipeDetector.OnSwipeDownHandler += SetNextDirectionToBottom;
-        PlayerSwipeDetector.OnSwipeLeftHandler += SetNextDirectionToLeft;
+        PlayerSwipeDetector.OnSwipeUpHandler += SetNextDirectionUp;
+        PlayerSwipeDetector.OnSwipeRightHandler += SetNextDirectionRight;
+        PlayerSwipeDetector.OnSwipeDownHandler += SetNextDirectionDown;
+        PlayerSwipeDetector.OnSwipeLeftHandler += SetNextDirectionLeft;
     }
 
     private void OnDestroy()
     {
-        PlayerSwipeDetector.OnSwipeUpHandler -= SetNextDirectionToTop;
-        PlayerSwipeDetector.OnSwipeRightHandler -= SetNextDirectionToRight;
-        PlayerSwipeDetector.OnSwipeDownHandler -= SetNextDirectionToBottom;
-        PlayerSwipeDetector.OnSwipeLeftHandler -= SetNextDirectionToLeft;
+        PlayerSwipeDetector.OnSwipeUpHandler -= SetNextDirectionUp;
+        PlayerSwipeDetector.OnSwipeRightHandler -= SetNextDirectionRight;
+        PlayerSwipeDetector.OnSwipeDownHandler -= SetNextDirectionDown;
+        PlayerSwipeDetector.OnSwipeLeftHandler -= SetNextDirectionLeft;
     }
 
-    private void SetNextDirectionToTop()
+    private void SetNextDirectionUp()
     {
-        PlayerMovementController.SetNextDirection(DirectionEnum.Top);
+        PlayerMovementController.SetNextDirection(DirectionEnum.Up);
+
+        try
+        {
+            PlayerUIController.UpdateInputFeedback(DirectionEnum.Up);
+        } catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 
-    private void SetNextDirectionToRight()
+    private void SetNextDirectionRight()
     {
         PlayerMovementController.SetNextDirection(DirectionEnum.Right);
+
+        try
+        {
+            PlayerUIController.UpdateInputFeedback(DirectionEnum.Right);
+        } catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 
-    private void SetNextDirectionToBottom()
+    private void SetNextDirectionDown()
     {
-        PlayerMovementController.SetNextDirection(DirectionEnum.Bottom);
+        PlayerMovementController.SetNextDirection(DirectionEnum.Down);
+
+        try
+        {
+            PlayerUIController.UpdateInputFeedback(DirectionEnum.Down);
+        } catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 
-    private void SetNextDirectionToLeft()
+    private void SetNextDirectionLeft()
     {
         PlayerMovementController.SetNextDirection(DirectionEnum.Left);
+
+        try
+        {
+            PlayerUIController.UpdateInputFeedback(DirectionEnum.Left);
+        } catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 }

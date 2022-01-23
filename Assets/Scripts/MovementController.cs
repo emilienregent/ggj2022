@@ -4,13 +4,13 @@ public enum DirectionEnum
 {
     None = 0,
 
-    Top = 1 << 0, // 1
+    Up = 1 << 0, // 1
     Right = 1 << 1, // 2
-    Bottom = 1 << 2, // 4
+    Down = 1 << 2, // 4
     Left = 1 << 3, // 8
 
     Horizontal = Left | Right, // 10
-    Vertical = Top | Bottom // 5
+    Vertical = Up | Down // 5
 };
 
 public class MovementController : MonoBehaviour
@@ -94,10 +94,10 @@ public class MovementController : MonoBehaviour
 
         switch (direction)
         {
-            case DirectionEnum.Top:
-                if (CurrentNode.CanMoveTop == true)
+            case DirectionEnum.Up:
+                if (CurrentNode.CanMoveUp == true)
                 {
-                    destination = CurrentNode.NodeTop;
+                    destination = CurrentNode.NodeUp;
                     return true;
                 }
                 break;
@@ -110,10 +110,10 @@ public class MovementController : MonoBehaviour
                 }
                 break;
 
-            case DirectionEnum.Bottom:
-                if (CurrentNode.CanMoveBottom == true)
+            case DirectionEnum.Down:
+                if (CurrentNode.CanMoveDown == true)
                 {
-                    destination = CurrentNode.NodeBottom;
+                    destination = CurrentNode.NodeDown;
                     return true;
                 }
                 break;

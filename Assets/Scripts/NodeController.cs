@@ -6,18 +6,18 @@ public class NodeController : MonoBehaviour
 {
     public GameObject Center;
 
-    private NodeController _nodeTop;
+    private NodeController _nodeUp;
     private NodeController _nodeRight;
-    private NodeController _nodeBottom;
+    private NodeController _nodeDown;
     private NodeController _nodeLeft;
 
-    public bool CanMoveTop { get { return (_directionMask & (int)DirectionEnum.Top) != 0; } }
+    public bool CanMoveUp { get { return (_directionMask & (int)DirectionEnum.Up) != 0; } }
     public bool CanMoveRight { get { return (_directionMask & (int)DirectionEnum.Right) != 0; } }
-    public bool CanMoveBottom { get { return (_directionMask & (int)DirectionEnum.Bottom) != 0; } }
+    public bool CanMoveDown { get { return (_directionMask & (int)DirectionEnum.Down) != 0; } }
     public bool CanMoveLeft { get { return (_directionMask & (int)DirectionEnum.Left) != 0; } }
-    public NodeController NodeTop { get => _nodeTop; set => _nodeTop = value; }
+    public NodeController NodeUp { get => _nodeUp; set => _nodeUp = value; }
     public NodeController NodeRight { get => _nodeRight; set => _nodeRight = value; }
-    public NodeController NodeBottom { get => _nodeBottom; set => _nodeBottom = value; }
+    public NodeController NodeDown { get => _nodeDown; set => _nodeDown = value; }
     public NodeController NodeLeft { get => _nodeLeft; set => _nodeLeft = value; }
 
     /// <summary>
@@ -41,13 +41,13 @@ public class NodeController : MonoBehaviour
     void Awake()
     {
         RaycastHit hit;
-        // Top Node
+        // Up Node
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1f))
         {
             if (hit.transform.gameObject.tag == TAG_NODE)
             {
-                NodeTop = hit.transform.gameObject.GetComponent<NodeController>();
-                AddDirection(DirectionEnum.Top);
+                NodeUp = hit.transform.gameObject.GetComponent<NodeController>();
+                AddDirection(DirectionEnum.Up);
             }
         }
         // Right Node
@@ -59,13 +59,13 @@ public class NodeController : MonoBehaviour
                 AddDirection(DirectionEnum.Right);
             }
         }
-        // Bottom Node
+        // Down Node
         if (Physics.Raycast(transform.position, -1f * transform.TransformDirection(Vector3.forward), out hit, 1f))
         {
             if (hit.transform.gameObject.tag == TAG_NODE)
             {
-                NodeBottom = hit.transform.gameObject.GetComponent<NodeController>();
-                AddDirection(DirectionEnum.Bottom);
+                NodeDown = hit.transform.gameObject.GetComponent<NodeController>();
+                AddDirection(DirectionEnum.Down);
             }
         }
         // Left Node

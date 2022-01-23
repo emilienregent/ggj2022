@@ -53,17 +53,17 @@ public class PhantomMovementController : MovementController
         }
         // Target is above us
         else if (target.position.z > transform.position.z
-            && CurrentDirection != DirectionEnum.Bottom
-            && TryGetNextNode(DirectionEnum.Top, out destination))
+            && CurrentDirection != DirectionEnum.Down
+            && TryGetNextNode(DirectionEnum.Up, out destination))
         {
-            direction = DirectionEnum.Top;
+            direction = DirectionEnum.Up;
         }
         // Target is below us
         else if (target.position.z < transform.position.z
-            && CurrentDirection != DirectionEnum.Top
-            && TryGetNextNode(DirectionEnum.Bottom, out destination))
+            && CurrentDirection != DirectionEnum.Up
+            && TryGetNextNode(DirectionEnum.Down, out destination))
         {
-            direction = DirectionEnum.Bottom;
+            direction = DirectionEnum.Down;
         }
 
         Debug.Log($"Set phantom direction to {direction}");
