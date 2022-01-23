@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4879772517238740042}
   - component: {fileID: 3166215394795127335}
   m_Layer: 0
-  m_Name: Warp
+  m_Name: WarpRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,3 +58,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPosition: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
+  nextNode: {fileID: 0}
+  warpDirection: 2
