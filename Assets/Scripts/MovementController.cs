@@ -17,7 +17,9 @@ public class MovementController : MonoBehaviour
 {
     public float Speed = 4f;
     public NodeController StartingNode;
+    public Transform Model;
 
+    private DirectionEnum _previousDirection;
     private DirectionEnum _currentDirection;
     private DirectionEnum _nextDirection;
     private NodeController _destinationNode;
@@ -27,12 +29,16 @@ public class MovementController : MonoBehaviour
     public DirectionEnum NextDirection { get => _nextDirection; set => _nextDirection = value; }
     public NodeController DestinationNode { get => _destinationNode; set => _destinationNode = value; }
     public NodeController CurrentNode { get => _currentNode; set => _currentNode = value; }
+    public DirectionEnum PreviousDirection { get => _previousDirection; set => _previousDirection = value; }
 
     // Start is called before the first frame update
     void Start()
     {
+        PreviousDirection = DirectionEnum.Up;
         CurrentDirection = DirectionEnum.Left;
         NextDirection = DirectionEnum.Left;
+
+        UpdateRotation();
 
         CurrentNode = StartingNode;
 
@@ -61,8 +67,12 @@ public class MovementController : MonoBehaviour
         if (TryGetNextNode(NextDirection, out destination))
         {
             // We update the current direction since we can go in the direction we want
-            CurrentDirection = NextDirection;
-
+            if(CurrentDirection != NextDirection)
+            {
+                PreviousDirection = CurrentDirection;
+                CurrentDirection = NextDirection;
+                UpdateRotation();
+            }
             SetNewDestination(destination);
         }
         // There is no node available in the direction we wanted, so we keep going in the current direction
@@ -128,5 +138,24 @@ public class MovementController : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void UpdateRotation()
+    {
+        // No model, no rotation
+        if (Model == null)
+        {
+            return;
+        }
+
+        Quaternion rotation;
+        if (CurrentDirection == DirectionEnum.Right)
+        {
+            rotation = Quaternion.Euler(0, 180, 270);
+        } else
+        {
+            rotation = Quaternion.Euler(0, 180, 90);
+        }
+        Model.localRotation = rotation;
     }
 }
