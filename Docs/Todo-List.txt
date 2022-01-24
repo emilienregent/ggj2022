@@ -1,35 +1,42 @@
-Créer dépôt github
-[Jérôme] Mettre en place l'architecture FSM
+[DONE] [Emilien] Créer dépôt github
+[???] [Jérôme] Mettre en place l'architecture FSM
 Menu
 	=> Overlay ?
 	=> Scènes superposés ?
 Phase de jeu Pac Man
 	=> [Emilien] Fantômes
 		=> L'IA des fantômes => https://www.todayifoundout.com/index.php/2015/10/ghosts-pac-man-work/
-			=> Patrouiller
-			=> Manger Pac Man
+			=> [DONE] Poursuivre
+			=> [RUNNING] Scatter
 			=> Fuir Pac Man
 		=> Modification des stats selon la progression de Pac Man (vitesse du fantôme rouge)
 		=> Manger le Pac Man
 			=> Condition de défaite (switch vers phase Fantôme)
+		=> Spawn des fantômes
 	=> [Jérôme] Labyrinthe
-		=> Intégration de blocs 3D pour construire le niveau de Pac Man
-		=> Téléportation gauche droite en sortant de la map
-		=> Apparition des patilles + Power UP
+		=> [DONE] Intégration de blocs 3D pour construire le niveau de Pac Man
+		=> [RUNNING] Téléportation gauche droite en sortant de la map
+			=> Gauche - Droite => OK
+			=> Droite - Gauche => To fix
+		=> [DONE] Apparition des pastilles + Power UP
 		=> Apparition random des fruits
 		=> Respawn fantômes
+		=> Réduire la taille de la map (pas de double murs)
+		=> Revoir couleur map (ground => black / cube => blue)
 	=> [Gaëtan] Joueur (Pac Man)
-		=> Navigation joueur
+		=> [DONE] Navigation joueur
 			=> [DONE] Déplacement automatique
 			=> [DONE] Changement de direction grâce aux inputs
 			=> [DONE] Feedback visuel sur la direction courante
-		=> Pastille
-			=> Comptabilisation du score
+		=> [DONE] Pastille
+			=> [DONE] Manger les pastilles
 		=> Power UP
 			=> Possible de manger les fantômes
 	=> Game Manager
+		=> [RUNNING] Comptage du score
 		=> Augmentation de la difficulté à mesure que le joueur se rapproche de la victoire
 			=> Impossibilié de gagner
+				=> Faire apparaître une pastille quand on en mange (passé un certain nombre)
 Phase de jeu Fantôme
 	=> Fantômes
 		=> Reprendre la même chose que la phase Pac Man
@@ -51,3 +58,11 @@ Ecran de victoire
 	=> Bravo !
 Sound Effects + Musique
 Graphismes (intégration des assets)
+	=> [DONE] Model Pac Man
+	=> Improve model Pac Man
+		=> à mettre à plat (allonger)
+		=> gérer la rotation en fonction de la direction
+	=> [DONE] Model Fantômes
+	=> Improve model fantômes
+		=> à mettre à plat (allonger)
+		=> gérer la rotation en fonction de la direction
