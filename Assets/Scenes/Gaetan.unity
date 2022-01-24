@@ -1729,6 +1729,10 @@ PrefabInstance:
       propertyPath: PlayerUIController
       value: 
       objectReference: {fileID: 1304560939}
+    - target: {fileID: 6923109881486132716, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
+      propertyPath: SwipeThreshold
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 6957018632551101991, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.5
