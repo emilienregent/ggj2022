@@ -22,7 +22,7 @@ Phase de jeu Pac Man
 		=> Navigation joueur
 			=> [DONE] Déplacement automatique
 			=> [DONE] Changement de direction grâce aux inputs
-			=> Feedback visuel sur la direction courante
+			=> [DONE] Feedback visuel sur la direction courante
 		=> Pastille
 			=> Comptabilisation du score
 		=> Power UP
