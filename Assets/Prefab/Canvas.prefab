@@ -59,13 +59,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ed0b14561dc524e6cbb2022c1329817e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 787fd1f793a23fc4bb3f577568936e0e, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -125,10 +125,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InputFeedback: {fileID: 287187631443508351}
-  InputFeedbackUp: {fileID: 21300000, guid: a9d8933286c524944abbd9dbda9e66b8, type: 3}
-  InputFeedbackRight: {fileID: 21300000, guid: 3d0ffdcc7a4d44c51b2bd11b5ce827b4, type: 3}
-  InputFeedbackDown: {fileID: 21300000, guid: 3b38ee72f688d4c01aa7b4859503b9d2, type: 3}
-  InputFeedbackLeft: {fileID: 21300000, guid: ed0b14561dc524e6cbb2022c1329817e, type: 3}
+  InputFeedbackUp: {fileID: 21300000, guid: 088b69083c526d241a4ea17e82b08564, type: 3}
+  InputFeedbackRight: {fileID: 21300000, guid: 047fb06fc3d6acb41bf007d63744b985, type: 3}
+  InputFeedbackDown: {fileID: 21300000, guid: fb4f0a57a88132c40aa34f3806557b17, type: 3}
+  InputFeedbackLeft: {fileID: 21300000, guid: 787fd1f793a23fc4bb3f577568936e0e, type: 3}
 --- !u!1 &287187632216805679
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,13 +189,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2009201d5aca84e2d8c80baaabe2e8ce, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cfe5457095862c94784113223c97fc97, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
