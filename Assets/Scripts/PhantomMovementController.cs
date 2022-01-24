@@ -69,8 +69,6 @@ public class PhantomMovementController : MovementController
             direction = DirectionEnum.Down;
         }
 
-        Debug.Log($"Set phantom direction to {direction}");
-
         // If we end up with a valid direction
         if (direction != DirectionEnum.None)
         {

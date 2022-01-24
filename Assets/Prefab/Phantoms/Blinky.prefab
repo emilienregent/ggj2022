@@ -142,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 3
   StartingNode: {fileID: 0}
+  Model: {fileID: 2710661685473875419}
   fallbackDestination: {fileID: 0}
 --- !u!1 &7976289504784670883
 GameObject:
@@ -191,7 +192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f529cc0aacbdcc4cb7d3bf7fe328101, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f529cc0aacbdcc4cb7d3bf7fe328101, type: 3}
       propertyPath: m_LocalPosition.z
