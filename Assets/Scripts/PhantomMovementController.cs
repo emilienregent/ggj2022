@@ -3,10 +3,13 @@ using UnityEngine;
 
 /// <summary>
 /// Manage phantom navigation
+/// <see cref="https://steamcommunity.com/sharedfiles/filedetails/?id=593226813"/>
 /// </summary>
 public class PhantomMovementController : MovementController
 {
-    public event Action IntersectionReached;
+    public event Action intersectionReached;
+
+    public Transform fallbackDestination;
 
     public override void EvaluateNextDirection()
     {
@@ -14,7 +17,7 @@ public class PhantomMovementController : MovementController
         if (CurrentNode.IsIntersection)
         {
             // Check for target position to update direction
-            IntersectionReached?.Invoke();
+            intersectionReached?.Invoke();
         }
         // Corner force to follow the path
         else if (CurrentNode.IsCorner)
@@ -32,44 +35,44 @@ public class PhantomMovementController : MovementController
     /// Compare position to target to find new direction
     /// <remarks>Can't use the direction where we come from</remarks>
     /// </summary>
-    public void FollowTarget(Transform target)
+    public void SetDirectionToDestination(Vector3 destination)
     {
         DirectionEnum direction = DirectionEnum.None;
-        NodeController destination;
+        NodeController node;
 
         // Target is on our left
-        if (target.position.x < transform.position.x
+        if (destination.x < transform.position.x
             && CurrentDirection != DirectionEnum.Right
-            && TryGetNextNode(DirectionEnum.Left, out destination))
+            && TryGetNextNode(DirectionEnum.Left, out node))
         {
             direction = DirectionEnum.Left;
         }
         // Target is on our right
-        else if (target.position.x > transform.position.x
+        else if (destination.x > transform.position.x
             && CurrentDirection != DirectionEnum.Left
-            && TryGetNextNode(DirectionEnum.Right, out destination))
+            && TryGetNextNode(DirectionEnum.Right, out node))
         {
             direction = DirectionEnum.Right;
         }
         // Target is above us
-        else if (target.position.z > transform.position.z
+        else if (destination.z > transform.position.z
             && CurrentDirection != DirectionEnum.Down
-            && TryGetNextNode(DirectionEnum.Up, out destination))
+            && TryGetNextNode(DirectionEnum.Up, out node))
         {
             direction = DirectionEnum.Up;
         }
         // Target is below us
-        else if (target.position.z < transform.position.z
+        else if (destination.z < transform.position.z
             && CurrentDirection != DirectionEnum.Up
-            && TryGetNextNode(DirectionEnum.Down, out destination))
+            && TryGetNextNode(DirectionEnum.Down, out node))
         {
             direction = DirectionEnum.Down;
         }
 
         Debug.Log($"Set phantom direction to {direction}");
 
-        // If we can actually move into this direction
-        if (TryGetNextNode(direction, out destination))
+        // If we end up with a valid direction
+        if (direction != DirectionEnum.None)
         {
             SetNextDirection(direction);
         }

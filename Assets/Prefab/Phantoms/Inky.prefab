@@ -1,23 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &731523515689587453
+--- !u!1001 &1323065579204422812
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 170601255376863202, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: cab00c04b3f3f15479f6544c8cb582c6, type: 2}
     - target: {fileID: 170601255376863204, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 170601255376863204, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5
+      value: 26.5
       objectReference: {fileID: 0}
     - target: {fileID: 170601255376863204, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -57,26 +53,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 170601255376863231, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
       propertyPath: m_Name
-      value: Pinky
+      value: Inky
+      objectReference: {fileID: 0}
+    - target: {fileID: 3704653191967974937, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
+      propertyPath: StartingNode
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3704653191967974937, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
+      propertyPath: fallbackDestination
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3704653191967974938, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
+      propertyPath: target
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3704653191967974938, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
---- !u!1 &610515045909851394 stripped
+--- !u!1 &1153592011278750563 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 170601255376863231, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
-  m_PrefabInstance: {fileID: 731523515689587453}
+  m_PrefabInstance: {fileID: 1323065579204422812}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3710134285417184340
+--- !u!114 &3269873783471218224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610515045909851394}
+  m_GameObject: {fileID: 1153592011278750563}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96f6e88199c019f48896ce7df88a64aa, type: 3}
+  m_Script: {fileID: 11500000, guid: 502a0708a9e7e8246ae96c25b9a667f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  blinky: {fileID: 0}
