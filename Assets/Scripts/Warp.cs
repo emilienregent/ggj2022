@@ -16,7 +16,7 @@ public class Warp : MonoBehaviour
             movementController.CurrentNode = target;
             movementController.DestinationNode = nextNode;
 
-            other.gameObject.transform.position = targetPosition;
+            other.gameObject.transform.position = target.gameObject.transform.position;
         }
     }
 
