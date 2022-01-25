@@ -18,7 +18,8 @@ public class PickupController : MonoBehaviour
 
             if (_type == PickupType.Energizer)
             {
-                GameManager.Instance.EnablePowerUp();
+                PlayerController controller = other.gameObject.GetComponent<PlayerController>();
+                controller.PlayerPowerUpBehavior.EnablePowerUp();
             }
 
             Destroy(this.gameObject);

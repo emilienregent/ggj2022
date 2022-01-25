@@ -49,10 +49,10 @@ public class PhantomController : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.TimeIntervalElapsed += UpdateMode;
+        PowerUpEvents.Instance.TimeIntervalElapsed += UpdateMode;
 
-        GameManager.Instance.PowerUpPhaseStarting += EnterFrightenedMode;
-        GameManager.Instance.PowerUpPhaseEnding += ResumePreviousMode;
+        PowerUpEvents.Instance.PowerUpPhaseStarting += EnterFrightenedMode;
+        PowerUpEvents.Instance.PowerUpPhaseEnding += ResumePreviousMode;
     }
 
     private void OnDestroy()
@@ -60,9 +60,9 @@ public class PhantomController : MonoBehaviour
         _phantomMovementController.intersectionReached -= SetNewDirection;
         GameManager.Instance.PacmanDying -= Respawn;
 
-        GameManager.Instance.TimeIntervalElapsed -= UpdateMode;
-        GameManager.Instance.PowerUpPhaseStarting -= EnterFrightenedMode;
-        GameManager.Instance.PowerUpPhaseEnding -= ResumePreviousMode;
+        PowerUpEvents.Instance.TimeIntervalElapsed -= UpdateMode;
+        PowerUpEvents.Instance.PowerUpPhaseStarting -= EnterFrightenedMode;
+        PowerUpEvents.Instance.PowerUpPhaseEnding -= ResumePreviousMode;
     }
 
     private void SetNewDirection()

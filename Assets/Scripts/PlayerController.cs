@@ -8,9 +8,11 @@ public class PlayerController : MonoBehaviour
 
     private MovementController _playerMovementController;
     private SwipeDetector _playerSwipeDetector;
+    private PowerUpBehavior _playerPowerUpBehavior;
 
     public MovementController PlayerMovementController { get => _playerMovementController; set => _playerMovementController = value; }
     public SwipeDetector PlayerSwipeDetector { get => _playerSwipeDetector; set => _playerSwipeDetector = value; }
+    public PowerUpBehavior PlayerPowerUpBehavior { get => _playerPowerUpBehavior; set => _playerPowerUpBehavior = value; }
 
     public InputUIController PlayerUIController;
 
@@ -28,6 +30,13 @@ public class PlayerController : MonoBehaviour
         if(PlayerSwipeDetector == null)
         {
             Debug.LogError("No SwipeDetector found in the Player's components");
+        }
+
+        PlayerPowerUpBehavior = GetComponent<PowerUpBehavior>();
+
+        if(PlayerPowerUpBehavior == null)
+        {
+            Debug.LogError("No PowerUpBehavior found in the Player's components");
         }
 
         PlayerSwipeDetector.OnSwipeUpHandler += SetNextDirectionUp;
