@@ -92,4 +92,18 @@ public class PhantomMovementController : MovementController
     {
         // Do nothing for ghost
     }
+
+    public void ResetMovement()
+    {
+        Vector3 spawnPoint = StartingNode.transform.position;
+
+        spawnPoint.y = transform.position.y;
+
+        transform.position = spawnPoint;
+        transform.rotation = Quaternion.identity;
+
+        CurrentNode = StartingNode;
+
+        EvaluateNextDirection();
+    }
 }

@@ -47,10 +47,10 @@ public class PhantomController : MonoBehaviour
 
     private void Start()
     {
-
         GameManager.Instance.TimeIntervalElapsed += UpdateMode;
-        GameManager.Instance.powerUpPhaseStarting += EnterFrightenedMode;
-        GameManager.Instance.powerUpPhaseEnding += ResumePreviousMode;
+
+        GameManager.Instance.PowerUpPhaseStarting += EnterFrightenedMode;
+        GameManager.Instance.PowerUpPhaseEnding += ResumePreviousMode;
     }
 
     private void OnDestroy()
@@ -58,8 +58,8 @@ public class PhantomController : MonoBehaviour
         _phantomMovementController.intersectionReached -= SetNewDirection;
 
         GameManager.Instance.TimeIntervalElapsed -= UpdateMode;
-        GameManager.Instance.powerUpPhaseStarting -= EnterFrightenedMode;
-        GameManager.Instance.powerUpPhaseEnding -= ResumePreviousMode;
+        GameManager.Instance.PowerUpPhaseStarting -= EnterFrightenedMode;
+        GameManager.Instance.PowerUpPhaseEnding -= ResumePreviousMode;
     }
 
     private void SetNewDirection()
@@ -165,5 +165,29 @@ public class PhantomController : MonoBehaviour
     protected virtual Vector3 GetDestination()
     {
         return target.transform.position;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag(GameManager.PACMAN_TAG))
+        {
+            if (_currentMode == MovementMode.Frightened)
+            {
+                GameManager.Instance.EatPhantom();
+
+                Respawn();
+            }
+            else
+            {
+                GameManager.Instance.EatPacman();
+            }
+        }
+    }
+
+    private void Respawn()
+    {
+        _phantomMovementController.ResetMovement();
+
+        ResumePreviousMode();
     }
 }

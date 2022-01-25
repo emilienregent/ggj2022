@@ -12,7 +12,7 @@ public class PickupController : MonoBehaviour
     private PickupType _type = PickupType.Pellet;
 
     private void OnTriggerEnter(Collider other) {
-        if(other.CompareTag("Pacman"))
+        if(other.CompareTag(GameManager.PACMAN_TAG))
         {
             GameManager.Instance.IncreaseScore((int)_type);
 

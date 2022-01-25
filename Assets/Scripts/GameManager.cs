@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static string PACMAN_TAG = "Pacman";
+
     private const float TIME_INTERVAL = 1f;
 
     private int _score;
@@ -15,8 +17,12 @@ public class GameManager : MonoBehaviour
     public int Score { get => _score; set => _score = value; }
 
     public event Action TimeIntervalElapsed;
-    public event Action powerUpPhaseStarting;
-    public event Action powerUpPhaseEnding;
+
+    public event Action PowerUpPhaseStarting;
+    public event Action PowerUpPhaseEnding;
+
+    public event Action PacmanDying;
+    public event Action PhantomDying;
 
     public float powerUpDuration = 3f;
     private float _powerUpStartTime = float.MaxValue;
@@ -99,14 +105,24 @@ public class GameManager : MonoBehaviour
     {
         _powerUpStartTime = Time.time;
 
-        powerUpPhaseStarting?.Invoke();
+        PowerUpPhaseStarting?.Invoke();
     }
 
     public void DisablePowerUp()
     {
         _powerUpStartTime = float.MaxValue;
 
-        powerUpPhaseEnding?.Invoke();
+        PowerUpPhaseEnding?.Invoke();
+    }
+
+    public void EatPacman()
+    {
+        PacmanDying?.Invoke();
+    }
+
+    public void EatPhantom()
+    {
+        PhantomDying?.Invoke();
     }
 
     private void OnDestroy()
