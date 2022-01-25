@@ -607,6 +607,7 @@ GameObject:
   m_Component:
   - component: {fileID: 495191690029168241}
   - component: {fileID: 2787564987391450323}
+  - component: {fileID: 6345818841899282475}
   m_Layer: 5
   m_Name: HUD Wrapper
   m_TagString: Untagged
@@ -659,6 +660,19 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 1
+--- !u!114 &6345818841899282475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3969707722664288468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2373edc6f2d3b0842bcbe79de6884ecc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Score: {fileID: 905067005747363365}
 --- !u!1 &5911667228611752633
 GameObject:
   m_ObjectHideFlags: 0

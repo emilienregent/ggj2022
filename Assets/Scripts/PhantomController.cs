@@ -43,13 +43,13 @@ public class PhantomController : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.timeIntervalElapsed += UpdateMode;
+        GameManager.Instance.TimeIntervalElapsed += UpdateMode;
     }
 
     private void OnDestroy()
     {
         _phantomMovementController.intersectionReached -= SetNewDirection;
-        GameManager.Instance.timeIntervalElapsed -= UpdateMode;
+        GameManager.Instance.TimeIntervalElapsed -= UpdateMode;
     }
 
     private void SetNewDirection()

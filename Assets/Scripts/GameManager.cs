@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviour
     [ReadOnly, SerializeField] private float _time;
     [ReadOnly, SerializeField] private float _elapsedTime;
 
-    public event Action timeIntervalElapsed;
+    public event Action TimeIntervalElapsed;
+    public int Score { get => _score; set => _score = value; }
 
     #region SINGLETON
     // Static singleton instance
@@ -41,11 +42,24 @@ public class GameManager : MonoBehaviour
 
         if (_elapsedTime >= TIME_INTERVAL)
         {
-            timeIntervalElapsed?.Invoke();
+            TimeIntervalElapsed?.Invoke();
         }
     }
 
     public void IncreaseScore(int points) {
-        _score += points;
+        Score += points;
+        OnScoreChangeAction();
+    }
+
+    public void DecreaseScore(int points)
+    {
+        Score = Mathf.Max(0, Score - points);
+        OnScoreChangeAction();
+    }
+
+    public event Action OnScoreChangeHandler;
+    public void OnScoreChangeAction()
+    {
+        OnScoreChangeHandler?.Invoke();
     }
 }

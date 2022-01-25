@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 355322338}
   - component: {fileID: 355322337}
   - component: {fileID: 355322340}
+  - component: {fileID: 355322341}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -454,6 +455,20 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &355322341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355322336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7a7c0aba165d3b4f840d22b657b8872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _time: 0
+  _elapsedTime: 0
 --- !u!1001 &551113692
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -841,6 +856,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1855631803588118648, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1855631803588118648, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1855631803588118648, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1855631803588118648, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1855631803588118648, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1855631803588118648, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2505023749928468060, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -886,6 +925,30 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4886125619211981506, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955448948963372444, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955448948963372444, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955448948963372444, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955448948963372444, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955448948963372444, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955448948963372444, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -941,7 +1004,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1867801941
 Transform:
   m_ObjectHideFlags: 0
