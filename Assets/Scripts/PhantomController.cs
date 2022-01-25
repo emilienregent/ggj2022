@@ -41,6 +41,7 @@ public class PhantomController : MonoBehaviour
         }
 
         _phantomMovementController.intersectionReached += SetNewDirection;
+        GameManager.Instance.PacmanDying += Respawn;
 
         EnterScatterMode();
     }
@@ -56,6 +57,7 @@ public class PhantomController : MonoBehaviour
     private void OnDestroy()
     {
         _phantomMovementController.intersectionReached -= SetNewDirection;
+        GameManager.Instance.PacmanDying -= Respawn;
 
         GameManager.Instance.TimeIntervalElapsed -= UpdateMode;
         GameManager.Instance.PowerUpPhaseStarting -= EnterFrightenedMode;

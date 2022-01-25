@@ -34,15 +34,7 @@ public class MovementController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PreviousDirection = DirectionEnum.Up;
-        CurrentDirection = DirectionEnum.Left;
-        NextDirection = DirectionEnum.Left;
-
-        UpdateRotation();
-
-        CurrentNode = StartingNode;
-
-        EvaluateNextDirection();
+        ResetMovement();
     }
 
     // Update is called once per frame
@@ -157,5 +149,21 @@ public class MovementController : MonoBehaviour
             rotation = Quaternion.Euler(0, 180, 90);
         }
         Model.localRotation = rotation;
+    }
+
+    public virtual void ResetMovement()
+    {
+
+        transform.position = StartingNode.gameObject.transform.position;
+
+        PreviousDirection = DirectionEnum.Up;
+        CurrentDirection = DirectionEnum.Left;
+        NextDirection = DirectionEnum.Left;
+
+        UpdateRotation();
+
+        CurrentNode = StartingNode;
+
+        EvaluateNextDirection();
     }
 }

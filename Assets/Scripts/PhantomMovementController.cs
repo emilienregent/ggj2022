@@ -93,7 +93,7 @@ public class PhantomMovementController : MovementController
         // Do nothing for ghost
     }
 
-    public void ResetMovement()
+    public override void ResetMovement()
     {
         Vector3 spawnPoint = StartingNode.transform.position;
 

@@ -34,6 +34,9 @@ public class PlayerController : MonoBehaviour
         PlayerSwipeDetector.OnSwipeRightHandler += SetNextDirectionRight;
         PlayerSwipeDetector.OnSwipeDownHandler += SetNextDirectionDown;
         PlayerSwipeDetector.OnSwipeLeftHandler += SetNextDirectionLeft;
+
+        // Do something when eaten
+        GameManager.Instance.PacmanDying += Respawn;
     }
 
     private void OnDestroy()
@@ -42,6 +45,8 @@ public class PlayerController : MonoBehaviour
         PlayerSwipeDetector.OnSwipeRightHandler -= SetNextDirectionRight;
         PlayerSwipeDetector.OnSwipeDownHandler -= SetNextDirectionDown;
         PlayerSwipeDetector.OnSwipeLeftHandler -= SetNextDirectionLeft;
+
+        GameManager.Instance.PacmanDying -= Respawn;
     }
 
     private void SetNextDirectionUp()
@@ -94,5 +99,11 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogException(e);
         }
+    }
+
+    private void Respawn()
+    {
+        SetNextDirectionLeft();
+        PlayerMovementController.ResetMovement();
     }
 }
