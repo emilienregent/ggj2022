@@ -9,7 +9,7 @@ public class HUDController : MonoBehaviour
     // UI References
     public Text Score;
 
-    private void Awake()
+    private void Start()
     {
         GameManager.Instance.OnScoreChangeHandler += UpdateScoreDisplay;
     }
