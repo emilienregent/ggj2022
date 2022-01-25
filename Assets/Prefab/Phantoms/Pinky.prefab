@@ -60,22 +60,6 @@ PrefabInstance:
       value: Pinky
       objectReference: {fileID: 0}
     - target: {fileID: 2710661685473875419, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2710661685473875419, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2710661685473875419, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 2710661685473875419, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 2710661685473875419, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 270
       objectReference: {fileID: 0}

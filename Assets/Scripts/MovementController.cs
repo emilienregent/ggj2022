@@ -140,7 +140,7 @@ public class MovementController : MonoBehaviour
         return false;
     }
 
-    private void UpdateRotation()
+    protected virtual void UpdateRotation()
     {
         // No model, no rotation
         if (Model == null)

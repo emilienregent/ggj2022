@@ -87,4 +87,9 @@ public class PhantomMovementController : MovementController
 
         CurrentDirection = newDirection;
     }
+
+    protected override void UpdateRotation()
+    {
+        // Do nothing for ghost
+    }
 }
