@@ -2,6 +2,8 @@
 
 public enum MovementMode
 {
+    None,
+
     Chase,
     Scatter,
     Frightened
@@ -22,7 +24,9 @@ public class PhantomController : MonoBehaviour
 
     private int _scatterModeCount = 0;
     private float _currentModeStartTime = 0f;
-    private MovementMode _currentMode = MovementMode.Chase;
+    private float _frightenedModeStartTime = 0f;
+    private MovementMode _currentMode = MovementMode.None;
+    private MovementMode _previousMode = MovementMode.None;
 
     private bool CanChase { get { return Time.time - _currentModeStartTime >= GetScatterDuration() && _currentMode == MovementMode.Scatter; } }
     private bool CanScatter { get { return Time.time - _currentModeStartTime >= CHASE_DURATION && _currentMode == MovementMode.Chase && _scatterModeCount < SCATTER_TRESHOLD; } }
@@ -38,47 +42,47 @@ public class PhantomController : MonoBehaviour
 
         _phantomMovementController.intersectionReached += SetNewDirection;
 
-        InitializeMode();
+        EnterScatterMode();
     }
 
     private void Start()
     {
+
         GameManager.Instance.TimeIntervalElapsed += UpdateMode;
+        GameManager.Instance.powerUpPhaseStarting += EnterFrightenedMode;
+        GameManager.Instance.powerUpPhaseEnding += ResumePreviousMode;
     }
 
     private void OnDestroy()
     {
         _phantomMovementController.intersectionReached -= SetNewDirection;
+
         GameManager.Instance.TimeIntervalElapsed -= UpdateMode;
+        GameManager.Instance.powerUpPhaseStarting -= EnterFrightenedMode;
+        GameManager.Instance.powerUpPhaseEnding -= ResumePreviousMode;
     }
 
     private void SetNewDirection()
     {
-        Vector3 destination = _currentMode == MovementMode.Chase ? GetDestination() : _phantomMovementController.fallbackDestination.position;
-
-        _phantomMovementController.SetDirectionToDestination(destination);
-    }
-
-    private void InitializeMode()
-    {
-        SetMode(MovementMode.Scatter);
-    }
-
-    private void SetMode(MovementMode mode)
-    {
-        Debug.Log($"Set mode <color=yellow>{mode}</color> on {gameObject.name}");
-
-        _currentMode = mode;
-        _currentModeStartTime = Time.time;
-
-        if (mode == MovementMode.Scatter)
+        if (_currentMode == MovementMode.Frightened)
         {
-            _scatterModeCount++;
+            _phantomMovementController.SetRandomDirection();
+        }
+        else
+        {
+            Vector3 destination = _currentMode == MovementMode.Chase ? GetDestination() : _phantomMovementController.fallbackDestination.position;
+
+            _phantomMovementController.SetDirectionToDestination(destination);
         }
     }
 
     private void UpdateMode()
     {
+        if (_currentMode == MovementMode.Frightened)
+        {
+            return;
+        }
+
         float elapsedTime = Time.time - _currentModeStartTime;
 
         switch (_currentMode)
@@ -86,19 +90,66 @@ public class PhantomController : MonoBehaviour
             case MovementMode.Chase:
                 if (CanScatter)
                 {
-                    SetMode(MovementMode.Scatter);
+                    EnterScatterMode();
                 }
             break;
             case MovementMode.Scatter:
                 if (CanChase)
                 {
-                    SetMode(MovementMode.Chase);
+                    EnterChaseMode();
                 }
             break;
-            case MovementMode.Frightened:
-
-            break;
         }
+    }
+
+    private void EnterChaseMode()
+    {
+        _previousMode = _currentMode;
+        _currentMode = MovementMode.Chase;
+
+        _currentModeStartTime = Time.time;
+
+        Debug.Log($"Enter mode <color=yellow>{_currentMode}</color> on {gameObject.name}");
+    }
+
+    private void EnterScatterMode()
+    {
+        _previousMode = _currentMode;
+        _currentMode = MovementMode.Scatter;
+
+        _currentModeStartTime = Time.time;
+
+        // Count switch to scatter mode but not when we resume it
+        if (_previousMode != MovementMode.Frightened)
+        {
+            _scatterModeCount++;
+        }
+
+        Debug.Log($"Enter mode <color=yellow>{_currentMode}</color> on {gameObject.name}");
+    }
+
+    private void EnterFrightenedMode()
+    {
+        _previousMode = _currentMode;
+        _currentMode = MovementMode.Frightened;
+
+        _currentModeStartTime = Time.time;
+        _frightenedModeStartTime = Time.time;
+
+        Debug.Log($"Enter mode <color=red>{_currentMode}</color> on {gameObject.name}");
+    }
+
+    private void ResumePreviousMode()
+    {
+        MovementMode newMode = _previousMode;
+
+        _previousMode = _currentMode;
+        _currentMode = newMode;
+
+        //Set start time X seconds before actual Time.time, where X is the paused duration of previous mode
+        _currentModeStartTime = Time.time - _frightenedModeStartTime - _currentModeStartTime;
+
+        Debug.Log($"Resume mode <color=blue>{_currentMode}</color> on {gameObject.name}");
     }
 
     private float GetScatterDuration()

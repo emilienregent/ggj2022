@@ -108,4 +108,11 @@ public class NodeController : MonoBehaviour
 
         return DirectionEnum.None;
     }
+
+    public DirectionEnum GetRandomDirection()
+    {
+        int randomIndex = Random.Range(0, _directions.Count);
+
+        return _directions[randomIndex];
+    }
 }

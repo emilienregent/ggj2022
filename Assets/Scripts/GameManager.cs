@@ -8,11 +8,18 @@ public class GameManager : MonoBehaviour
 
     private int _score;
 
-    [ReadOnly, SerializeField] private float _time;
+    [ReadOnly, SerializeField] private float _lastInterval;
     [ReadOnly, SerializeField] private float _elapsedTime;
 
-    public event Action TimeIntervalElapsed;
+
     public int Score { get => _score; set => _score = value; }
+
+    public event Action TimeIntervalElapsed;
+    public event Action powerUpPhaseStarting;
+    public event Action powerUpPhaseEnding;
+
+    public float powerUpDuration = 3f;
+    private float _powerUpStartTime = float.MaxValue;
 
     #region SINGLETON
     // Static singleton instance
@@ -32,17 +39,42 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        _time = Time.time;
+        _lastInterval = Time.time;
+
+        RegisterEvents();
     }
     #endregion
 
+    private void RegisterEvents()
+    {
+        TimeIntervalElapsed += UpdatePowerUp;
+    }
+
+    private void UnregisterEvents()
+    {
+        TimeIntervalElapsed -= UpdatePowerUp;
+    }
+
     private void Update()
     {
-        _elapsedTime = Time.time - _time;
+        UpdateTimerTick();
+    }
 
-        if (_elapsedTime >= TIME_INTERVAL)
+    private void UpdatePowerUp()
+    {
+        if (Time.time - _powerUpStartTime >= powerUpDuration)
+        {
+            DisablePowerUp();
+        }
+    }
+
+    private void UpdateTimerTick()
+    {
+        if (Time.time - _lastInterval >= TIME_INTERVAL)
         {
             TimeIntervalElapsed?.Invoke();
+
+            _lastInterval = Time.time;
         }
     }
 
@@ -61,5 +93,24 @@ public class GameManager : MonoBehaviour
     public void OnScoreChangeAction()
     {
         OnScoreChangeHandler?.Invoke();
+    }
+
+    public void EnablePowerUp()
+    {
+        _powerUpStartTime = Time.time;
+
+        powerUpPhaseStarting?.Invoke();
+    }
+
+    public void DisablePowerUp()
+    {
+        _powerUpStartTime = float.MaxValue;
+
+        powerUpPhaseEnding?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        UnregisterEvents();
     }
 }

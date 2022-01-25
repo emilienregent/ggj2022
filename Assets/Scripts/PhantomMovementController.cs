@@ -75,4 +75,16 @@ public class PhantomMovementController : MovementController
             SetNextDirection(direction);
         }
     }
+
+    public void SetRandomDirection()
+    {
+        DirectionEnum newDirection = CurrentDirection;
+
+        while (newDirection.Equals(CurrentDirection))
+        {
+            newDirection = CurrentNode.GetRandomDirection();
+        }
+
+        CurrentDirection = newDirection;
+    }
 }
