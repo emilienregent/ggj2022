@@ -9,12 +9,14 @@ public class GameManager : MonoBehaviour
     private const float TIME_INTERVAL = 1f;
 
     private int _score;
+    private int _lifesLeft;
 
     [ReadOnly, SerializeField] private float _lastInterval;
     [ReadOnly, SerializeField] private float _elapsedTime;
 
 
     public int Score { get => _score; set => _score = value; }
+    public int LifesLeft { get => _lifesLeft; set => _lifesLeft = value; }
 
     public event Action TimeIntervalElapsed;
 
@@ -24,7 +26,10 @@ public class GameManager : MonoBehaviour
     public event Action PacmanDying;
     public event Action PhantomDying;
 
-    public float powerUpDuration = 3f;
+    // Configuration
+    public float PowerUpDuration = 3f;
+    public int Lifes = 3;
+
     private float _powerUpStartTime = float.MaxValue;
 
     #region SINGLETON
@@ -46,6 +51,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this);
 
         _lastInterval = Time.time;
+        _lifesLeft = Lifes;
 
         RegisterEvents();
     }
@@ -68,7 +74,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdatePowerUp()
     {
-        if (Time.time - _powerUpStartTime >= powerUpDuration)
+        if (Time.time - _powerUpStartTime >= PowerUpDuration)
         {
             DisablePowerUp();
         }
@@ -101,6 +107,24 @@ public class GameManager : MonoBehaviour
         OnScoreChangeHandler?.Invoke();
     }
 
+    public void AddLife()
+    {
+        LifesLeft++;
+        OnLifeChangeAction();
+    }
+
+    public void RemoveLife()
+    {
+        LifesLeft--;
+        OnLifeChangeAction();
+    }
+
+    public event Action OnLifeChangeHandler;
+    public void OnLifeChangeAction()
+    {
+        OnLifeChangeHandler?.Invoke();
+    }
+
     public void EnablePowerUp()
     {
         _powerUpStartTime = Time.time;
@@ -117,6 +141,7 @@ public class GameManager : MonoBehaviour
 
     public void EatPacman()
     {
+        RemoveLife();
         PacmanDying?.Invoke();
     }
 
