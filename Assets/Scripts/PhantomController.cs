@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 public enum MovementMode
 {
@@ -20,6 +21,7 @@ public class PhantomController : MonoBehaviour
 
     public PlayerController target;
 
+    private PhantomGraphicController _phantomGraphicController;
     protected PhantomMovementController _phantomMovementController;
 
     private int _scatterModeCount = 0;
@@ -33,12 +35,11 @@ public class PhantomController : MonoBehaviour
 
     private void Awake()
     {
+        _phantomGraphicController = GetComponent<PhantomGraphicController>();
         _phantomMovementController = GetComponent<PhantomMovementController>();
 
-        if (_phantomMovementController == null)
-        {
-            Debug.LogError("No PhantomMovementController found in the Phantom's components");
-        }
+        UnityEngine.Assertions.Assert.IsNotNull(_phantomGraphicController, "No PhantomGraphicController found in the Phantom's components");
+        UnityEngine.Assertions.Assert.IsNotNull(_phantomMovementController, "No PhantomMovementController found in the Phantom's components");
 
         _phantomMovementController.intersectionReached += SetNewDirection;
         GameManager.Instance.PacmanDying += Respawn;
@@ -107,7 +108,8 @@ public class PhantomController : MonoBehaviour
     private void EnterChaseMode()
     {
         _previousMode = _currentMode;
-        _currentMode = MovementMode.Chase;
+
+        SetMode(MovementMode.Chase);
 
         _currentModeStartTime = Time.time;
 
@@ -117,7 +119,8 @@ public class PhantomController : MonoBehaviour
     private void EnterScatterMode()
     {
         _previousMode = _currentMode;
-        _currentMode = MovementMode.Scatter;
+
+        SetMode(MovementMode.Scatter);
 
         _currentModeStartTime = Time.time;
 
@@ -133,7 +136,8 @@ public class PhantomController : MonoBehaviour
     private void EnterFrightenedMode()
     {
         _previousMode = _currentMode;
-        _currentMode = MovementMode.Frightened;
+
+        SetMode(MovementMode.Frightened);
 
         _currentModeStartTime = Time.time;
         _frightenedModeStartTime = Time.time;
@@ -145,13 +149,19 @@ public class PhantomController : MonoBehaviour
     {
         MovementMode newMode = _previousMode;
 
-        _previousMode = _currentMode;
-        _currentMode = newMode;
+        SetMode(newMode);
 
         //Set start time X seconds before actual Time.time, where X is the paused duration of previous mode
         _currentModeStartTime = Time.time - _frightenedModeStartTime - _currentModeStartTime;
 
         Debug.Log($"Resume mode <color=blue>{_currentMode}</color> on {gameObject.name}");
+    }
+
+    private void SetMode(MovementMode mode)
+    {
+        _currentMode = mode;
+
+        _phantomGraphicController.SetMode(mode);
     }
 
     private float GetScatterDuration()
