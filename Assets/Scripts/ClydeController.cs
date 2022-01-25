@@ -12,7 +12,7 @@ public class ClydeController : PhantomController
 
     protected override Vector3 GetDestination()
     {
-        if (Vector3.Distance(target.position, transform.position) > DISTANCE_TRESHOLD)
+        if (Vector3.Distance(target.transform.position, transform.position) > DISTANCE_TRESHOLD)
         {
             return base.GetDestination();
         }

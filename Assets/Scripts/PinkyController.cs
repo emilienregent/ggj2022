@@ -11,6 +11,6 @@ public class PinkyController : PhantomController
 
     protected override Vector3 GetDestination()
     {
-        return target.position + target.forward * DISTANCE_OFFSET;
+        return target.transform.position + target.transform.forward * DISTANCE_OFFSET;
     }
 }

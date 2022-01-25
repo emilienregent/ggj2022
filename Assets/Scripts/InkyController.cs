@@ -13,7 +13,7 @@ public class InkyController : PhantomController
 
     protected override Vector3 GetDestination()
     {
-        Vector3 temporaryDestination = target.position + target.forward * DISTANCE_OFFSET;
+        Vector3 temporaryDestination = target.transform.position + target.transform.forward * DISTANCE_OFFSET;
 
         return (temporaryDestination - blinky.position) * 2f;
     }

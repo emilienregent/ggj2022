@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &163707965 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3599478364530545438, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
-  m_PrefabInstance: {fileID: 1237429724}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &355322336
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7a7c0aba165d3b4f840d22b657b8872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _time: 0
+  _elapsedTime: 0
 --- !u!4 &745725024
 Transform:
   m_ObjectHideFlags: 0
@@ -528,7 +525,7 @@ PrefabInstance:
     - target: {fileID: 3269873783471218224, guid: b64bba488d53f8c43a618ef96f3c540c, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 163707965}
+      objectReference: {fileID: 1237429726}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b64bba488d53f8c43a618ef96f3c540c, type: 3}
 --- !u!4 &1001213555 stripped
@@ -7457,6 +7454,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 577dbf429297620479dd0810abd8bdeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1237429726 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6872139901110548615, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
+  m_PrefabInstance: {fileID: 1237429724}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b8892a008006b4987553a8ff34752a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1378568537 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6518304972414657011, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
@@ -7528,7 +7536,7 @@ PrefabInstance:
     - target: {fileID: 3704653191967974938, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 163707965}
+      objectReference: {fileID: 1237429726}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6226318faa42dbd40a6f38447428d72d, type: 3}
 --- !u!4 &1434577928 stripped
@@ -7742,7 +7750,7 @@ PrefabInstance:
     - target: {fileID: 3710134285417184340, guid: 3676d8faef105ce4281cebb84fde2b9a, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 163707965}
+      objectReference: {fileID: 1237429726}
     - target: {fileID: 4129649882459895012, guid: 3676d8faef105ce4281cebb84fde2b9a, type: 3}
       propertyPath: StartingNode
       value: 
@@ -7824,7 +7832,7 @@ PrefabInstance:
     - target: {fileID: 6861747695208119138, guid: 5f365e79d63b291428341e43a5059e1e, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 163707965}
+      objectReference: {fileID: 1237429726}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f365e79d63b291428341e43a5059e1e, type: 3}
 --- !u!4 &6702624797963988872 stripped

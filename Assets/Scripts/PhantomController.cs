@@ -113,6 +113,6 @@ public class PhantomController : MonoBehaviour
     /// <returns>The position phantom will try to reach</returns>
     protected virtual Vector3 GetDestination()
     {
-        return target.position;
+        return target.transform.position;
     }
 }
