@@ -11,6 +11,12 @@ public class PickupController : MonoBehaviour
     [SerializeField]
     private PickupType _type = PickupType.Pellet;
 
+    private SphereCollider _collider;
+
+    private void Start() {
+        _collider = GetComponent<SphereCollider>();
+    }
+
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag(GameManager.PACMAN_TAG))
         {
@@ -22,7 +28,17 @@ public class PickupController : MonoBehaviour
                 controller.PlayerPowerUpBehavior.EnablePowerUp();
             }
 
-            Destroy(this.gameObject);
+            DisableGameObject();
         }
+    }
+
+    private void DisableGameObject() {
+        this.gameObject.SetActive(false);
+        _collider.enabled = false;
+    }
+
+    public void EnableGameObject() {
+        this.gameObject.SetActive(true);
+        _collider.enabled = true;
     }
 }

@@ -3,6 +3,13 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameState {
+    MENU,
+    PACMAN,
+    GHOST,
+    GAMEOVER
+}
+
 public class GameManager
 {
     public static string PACMAN_TAG = "Pacman";
@@ -20,6 +27,8 @@ public class GameManager
     public float PowerUpDuration = 3f;
     public int Lifes = 3;
 
+    public GameState CurrentState { get; private set; }
+
     #region SINGLETON
     // Static singleton instance
     private static GameManager _instance = null;
@@ -35,6 +44,7 @@ public class GameManager
             if (_instance == null)
             {
                 _instance = new GameManager();
+                _instance.ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
 
             }
             return _instance;
@@ -47,6 +57,7 @@ public class GameManager
     {
         _score = 0;
         _lifesLeft = Lifes;
+        ChangeState(GameState.PACMAN);
     }
 
     public void IncreaseScore(int points) {
@@ -91,12 +102,24 @@ public class GameManager
 
         if(LifesLeft <= 0)
         {
-            SceneManager.LoadScene("GameOver");
+            if(CurrentState == GameState.PACMAN)
+            {
+                ChangeState(GameState.GHOST);
+            } else if(CurrentState == GameState.GHOST)
+            {
+                ChangeState(GameState.GAMEOVER);
+                SceneManager.LoadScene("GameOver");
+            }
         }
     }
 
     public void EatPhantom()
     {
         PhantomDying?.Invoke();
+    }
+
+    public void ChangeState(GameState newState) {
+        Debug.Log("SWITCH TO STATE " + newState.ToString());
+        CurrentState = newState;
     }
 }
