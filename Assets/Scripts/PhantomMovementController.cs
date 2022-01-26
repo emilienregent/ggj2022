@@ -40,22 +40,8 @@ public class PhantomMovementController : MovementController
         DirectionEnum direction = DirectionEnum.None;
         NodeController node;
 
-        // Target is on our left
-        if (destination.x < transform.position.x
-            && CurrentDirection != DirectionEnum.Right
-            && TryGetNextNode(DirectionEnum.Left, out node))
-        {
-            direction = DirectionEnum.Left;
-        }
-        // Target is on our right
-        else if (destination.x > transform.position.x
-            && CurrentDirection != DirectionEnum.Left
-            && TryGetNextNode(DirectionEnum.Right, out node))
-        {
-            direction = DirectionEnum.Right;
-        }
         // Target is above us
-        else if (destination.z > transform.position.z
+        if (destination.z > transform.position.z
             && CurrentDirection != DirectionEnum.Down
             && TryGetNextNode(DirectionEnum.Up, out node))
         {
@@ -67,6 +53,20 @@ public class PhantomMovementController : MovementController
             && TryGetNextNode(DirectionEnum.Down, out node))
         {
             direction = DirectionEnum.Down;
+        }
+        // Target is on our left
+        else if (destination.x < transform.position.x
+            && CurrentDirection != DirectionEnum.Right
+            && TryGetNextNode(DirectionEnum.Left, out node))
+        {
+            direction = DirectionEnum.Left;
+        }
+        // Target is on our right
+        else if (destination.x > transform.position.x
+            && CurrentDirection != DirectionEnum.Left
+            && TryGetNextNode(DirectionEnum.Right, out node))
+        {
+            direction = DirectionEnum.Right;
         }
 
         // If we end up with a valid direction
@@ -85,7 +85,32 @@ public class PhantomMovementController : MovementController
             newDirection = CurrentNode.GetRandomDirection();
         }
 
-        CurrentDirection = newDirection;
+        SetNextDirection(newDirection);
+    }
+
+    public void ReverseDirection()
+    {
+        DirectionEnum oppositeDirection;
+
+        DirectionEnum currentAxis = DirectionEnum.Horizontal.HasFlag(CurrentDirection) ? DirectionEnum.Horizontal : DirectionEnum.Vertical;
+
+        if (currentAxis == DirectionEnum.Horizontal)
+        {
+            oppositeDirection = CurrentDirection == DirectionEnum.Left ? DirectionEnum.Right : DirectionEnum.Left;
+        }
+        else
+        {
+            oppositeDirection = CurrentDirection == DirectionEnum.Up ? DirectionEnum.Down : DirectionEnum.Up;
+        }
+
+        if (TryGetNextNode(oppositeDirection, out var node))
+        {
+            SetNextDirection(oppositeDirection);
+        }
+        else
+        {
+            SetRandomDirection();
+        }
     }
 
     protected override void UpdateRotation()

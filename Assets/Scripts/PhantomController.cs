@@ -142,6 +142,8 @@ public class PhantomController : MonoBehaviour
         _currentModeStartTime = Time.time;
         _frightenedModeStartTime = Time.time;
 
+        _phantomMovementController.ReverseDirection();
+
         Debug.Log($"Enter mode <color=red>{_currentMode}</color> on {gameObject.name}");
     }
 
@@ -200,6 +202,9 @@ public class PhantomController : MonoBehaviour
     {
         _phantomMovementController.ResetMovement();
 
-        ResumePreviousMode();
+        if (_previousMode != MovementMode.None && _previousMode != MovementMode.Frightened)
+        {
+            ResumePreviousMode();
+        }
     }
 }
