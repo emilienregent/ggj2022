@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public enum GameState {
     MENU,
@@ -16,6 +17,9 @@ public class GameManager
 
     private int _score;
     private int _lifesLeft;
+    private List<GameObject> _pellets;
+
+    public int _totalPellets { get; private set; }
 
     public int Score { get => _score; set => _score = value; }
     public int LifesLeft { get => _lifesLeft; set => _lifesLeft = value; }
@@ -32,6 +36,7 @@ public class GameManager
     #region SINGLETON
     // Static singleton instance
     private static GameManager _instance = null;
+
     protected GameManager()
     {
         RestartGame();
@@ -45,7 +50,7 @@ public class GameManager
             {
                 _instance = new GameManager();
                 _instance.ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
-
+                _instance._totalPellets = GameObject.FindGameObjectsWithTag("Pellet").Length;
             }
             return _instance;
         }
