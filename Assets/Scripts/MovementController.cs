@@ -53,10 +53,8 @@ public class MovementController : MonoBehaviour
 
     public virtual void EvaluateNextDirection()
     {
-        NodeController destination;
-
         // If we can go to the wanted direction, we go with it
-        if (TryGetNextNode(NextDirection, out destination))
+        if (TryGetNextNode(NextDirection, out NodeController destination))
         {
             // We update the current direction since we can go in the direction we want
             if(CurrentDirection != NextDirection)
@@ -67,8 +65,16 @@ public class MovementController : MonoBehaviour
             }
             SetNewDestination(destination);
         }
+        else
+        {
+            FallbackNextDirection();
+        }
+    }
+
+    protected virtual void FallbackNextDirection()
+    {
         // There is no node available in the direction we wanted, so we keep going in the current direction
-        else if (TryGetNextNode(CurrentDirection, out destination))
+        if (TryGetNextNode(CurrentDirection, out NodeController destination))
         {
             SetNewDestination(destination);
         }

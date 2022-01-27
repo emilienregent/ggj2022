@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.Rendering;
 
 public enum MovementMode
 {
     None,
 
+    Spawn,
     Chase,
     Scatter,
     Frightened
@@ -21,6 +21,14 @@ public class PhantomController : MonoBehaviour
 
     public PlayerController target;
 
+    [Header("Phantom house rules")]
+    [Tooltip("Order index to leave the house. Lowest index first. 0 means already out.")]
+    public int leaveIndex;
+    [Tooltip("How many pellet have to be collected before leaving the phantom house")]
+    public int pelletLimit;
+
+    private int _pelletCount;
+
     private PhantomGraphicController _phantomGraphicController;
     protected PhantomMovementController _phantomMovementController;
 
@@ -32,6 +40,7 @@ public class PhantomController : MonoBehaviour
 
     private bool CanChase { get { return Time.time - _currentModeStartTime >= GetScatterDuration() && _currentMode == MovementMode.Scatter; } }
     private bool CanScatter { get { return Time.time - _currentModeStartTime >= CHASE_DURATION && _currentMode == MovementMode.Chase && _scatterModeCount < SCATTER_TRESHOLD; } }
+    private bool IsNextToLeave { get { return 4 - leaveIndex == GameManager.Instance.PhantomInHouse; } }
 
     private void Awake()
     {
@@ -41,28 +50,72 @@ public class PhantomController : MonoBehaviour
         UnityEngine.Assertions.Assert.IsNotNull(_phantomGraphicController, "No PhantomGraphicController found in the Phantom's components");
         UnityEngine.Assertions.Assert.IsNotNull(_phantomMovementController, "No PhantomMovementController found in the Phantom's components");
 
+        _phantomMovementController.spawnReached += LeaveSpawnMode;
         _phantomMovementController.intersectionReached += SetNewDirection;
+
         GameManager.Instance.PacmanDying += Respawn;
 
-        EnterScatterMode();
+        if (leaveIndex > 0)
+        {
+            EnterPhantomHouse();
+        }
+        else
+        {
+            LeaveSpawnMode();
+        }
     }
 
     private void Start()
     {
         PowerUpEvents.Instance.TimeIntervalElapsed += UpdateMode;
-
-        PowerUpEvents.Instance.PowerUpPhaseStarting += EnterFrightenedMode;
-        PowerUpEvents.Instance.PowerUpPhaseEnding += ResumePreviousMode;
     }
 
     private void OnDestroy()
     {
+        _phantomMovementController.spawnReached -= LeaveSpawnMode;
         _phantomMovementController.intersectionReached -= SetNewDirection;
+
         GameManager.Instance.PacmanDying -= Respawn;
+        GameManager.Instance.PelletCollected -= IncrementPelletCount;
 
         PowerUpEvents.Instance.TimeIntervalElapsed -= UpdateMode;
         PowerUpEvents.Instance.PowerUpPhaseStarting -= EnterFrightenedMode;
-        PowerUpEvents.Instance.PowerUpPhaseEnding -= ResumePreviousMode;
+        PowerUpEvents.Instance.PowerUpPhaseEnding -= LeaveFrightenedMode;
+    }
+
+    private void IncrementPelletCount()
+    {
+        if (IsNextToLeave)
+        {
+            _pelletCount++;
+
+            Debug.Log($"Still {pelletLimit - _pelletCount} pellet for {gameObject.name} to leave the house.");
+
+            if (_pelletCount >= pelletLimit)
+            {
+                LeavePhantomHouse();
+            }
+        }
+    }
+
+    private void EnterPhantomHouse()
+    {
+        GameManager.Instance.EnterPhantomHouse();
+
+        GameManager.Instance.PelletCollected += IncrementPelletCount;
+
+        SetMode(MovementMode.None);
+    }
+
+    private void LeavePhantomHouse()
+    {
+        GameManager.Instance.LeavePhantomHouse();
+
+        GameManager.Instance.PelletCollected -= IncrementPelletCount;
+
+        Debug.Log($"{gameObject.name} is leaving the house !");
+
+        EnterSpawnMode();
     }
 
     private void SetNewDirection()
@@ -73,7 +126,8 @@ public class PhantomController : MonoBehaviour
         }
         else
         {
-            Vector3 destination = _currentMode == MovementMode.Chase ? GetDestination() : _phantomMovementController.fallbackDestination.position;
+            Vector3 destination = _currentMode == MovementMode.Spawn ? Vector3.forward * 1000f
+                : _currentMode == MovementMode.Chase ? GetDestination() : _phantomMovementController.fallbackDestination.position;
 
             _phantomMovementController.SetDirectionToDestination(destination);
         }
@@ -105,10 +159,29 @@ public class PhantomController : MonoBehaviour
         }
     }
 
+    private void EnterSpawnMode()
+    {
+        SetMode(MovementMode.Spawn);
+        SetNewDirection();
+
+        Debug.Log($"Enter mode <color=yellow>{_currentMode}</color> on {gameObject.name}");
+    }
+
+    private void LeaveSpawnMode()
+    {
+        _phantomMovementController.canTriggerSpawn = false;
+
+        // From now on phantom can be frightened
+        PowerUpEvents.Instance.PowerUpPhaseStarting -= EnterFrightenedMode;
+        PowerUpEvents.Instance.PowerUpPhaseStarting += EnterFrightenedMode;
+        PowerUpEvents.Instance.PowerUpPhaseEnding -= LeaveFrightenedMode;
+        PowerUpEvents.Instance.PowerUpPhaseEnding += LeaveFrightenedMode;
+
+        EnterScatterMode();
+    }
+
     private void EnterChaseMode()
     {
-        _previousMode = _currentMode;
-
         SetMode(MovementMode.Chase);
 
         _currentModeStartTime = Time.time;
@@ -118,8 +191,6 @@ public class PhantomController : MonoBehaviour
 
     private void EnterScatterMode()
     {
-        _previousMode = _currentMode;
-
         SetMode(MovementMode.Scatter);
 
         _currentModeStartTime = Time.time;
@@ -135,7 +206,10 @@ public class PhantomController : MonoBehaviour
 
     private void EnterFrightenedMode()
     {
-        _previousMode = _currentMode;
+        if (_currentMode == MovementMode.Frightened)
+        {
+            return;
+        }
 
         SetMode(MovementMode.Frightened);
 
@@ -147,11 +221,16 @@ public class PhantomController : MonoBehaviour
         Debug.Log($"Enter mode <color=red>{_currentMode}</color> on {gameObject.name}");
     }
 
-    private void ResumePreviousMode()
+    private void LeaveFrightenedMode()
     {
-        MovementMode newMode = _previousMode;
+        if (_currentMode != MovementMode.Frightened)
+        {
+            return;
+        }
 
-        SetMode(newMode);
+        MovementMode mode = _previousMode == MovementMode.Chase || _previousMode == MovementMode.Scatter ? _previousMode : MovementMode.Chase;
+
+        SetMode(mode, savePrevious:false);
 
         //Set start time X seconds before actual Time.time, where X is the paused duration of previous mode
         _currentModeStartTime = Time.time - _frightenedModeStartTime - _currentModeStartTime;
@@ -159,8 +238,13 @@ public class PhantomController : MonoBehaviour
         Debug.Log($"Resume mode <color=blue>{_currentMode}</color> on {gameObject.name}");
     }
 
-    private void SetMode(MovementMode mode)
+    private void SetMode(MovementMode mode, bool savePrevious = true)
     {
+        if (savePrevious)
+        {
+            _previousMode = _currentMode;
+        }
+
         _currentMode = mode;
 
         _phantomGraphicController.SetMode(mode);
@@ -202,9 +286,13 @@ public class PhantomController : MonoBehaviour
     {
         _phantomMovementController.ResetMovement();
 
-        if (_previousMode != MovementMode.None && _previousMode != MovementMode.Frightened)
+        if (leaveIndex > 0)
         {
-            ResumePreviousMode();
+            EnterPhantomHouse();
+        }
+        else
+        {
+            LeaveSpawnMode();
         }
     }
 }

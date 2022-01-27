@@ -7,12 +7,22 @@ using UnityEngine;
 /// </summary>
 public class PhantomMovementController : MovementController
 {
+    public event Action spawnReached;
     public event Action intersectionReached;
 
+    [HideInInspector]
+    public bool canTriggerSpawn;
+
+    public Transform spawnDestination;
     public Transform fallbackDestination;
 
     public override void EvaluateNextDirection()
     {
+        if (canTriggerSpawn && CurrentNode.transform.position.Equals(spawnDestination.position))
+        {
+            spawnReached?.Invoke();
+        }
+
         // Reaching intersection need destination reevaluation
         if (CurrentNode.IsIntersection)
         {
@@ -26,9 +36,21 @@ public class PhantomMovementController : MovementController
 
             SetNextDirection(direction);
         }
+        else if (CurrentNode.IsDeadEnd)
+        {
+            ReverseDirection();
+        }
 
         // Apply change of direction on destination
         base.EvaluateNextDirection();
+    }
+
+    protected override void FallbackNextDirection()
+    {
+        // If everything else has failed we move into a random direction
+        SetRandomDirection();
+
+        base.FallbackNextDirection();
     }
 
     /// <summary>
@@ -80,7 +102,7 @@ public class PhantomMovementController : MovementController
     {
         DirectionEnum newDirection = CurrentDirection;
 
-        while (newDirection.Equals(CurrentDirection))
+        while (newDirection.Equals(CurrentDirection) && !CurrentNode.IsDeadEnd)
         {
             newDirection = CurrentNode.GetRandomDirection();
         }
@@ -128,6 +150,11 @@ public class PhantomMovementController : MovementController
         transform.rotation = Quaternion.identity;
 
         CurrentNode = StartingNode;
+
+        CurrentDirection = DirectionEnum.Left;
+        NextDirection = DirectionEnum.Left;
+
+        canTriggerSpawn = true;
 
         EvaluateNextDirection();
     }

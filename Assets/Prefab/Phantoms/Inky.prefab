@@ -108,4 +108,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  leaveIndex: 2
+  pelletLimit: 30
   blinky: {fileID: 0}

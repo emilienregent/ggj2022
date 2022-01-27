@@ -28,6 +28,10 @@ public class NodeController : MonoBehaviour
     /// An intersection is a node with more than 2 directions
     /// </summary>
     public bool IsIntersection { get { return _directionCount > 2; } }
+    /// <summary>
+    /// A dead end is a node with only one direction
+    /// </summary>
+    public bool IsDeadEnd { get { return _directionCount == 1; } }
 
     [ReadOnly]
     [SerializeField]

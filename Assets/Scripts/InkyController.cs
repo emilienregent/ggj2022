@@ -7,6 +7,7 @@
 /// </summary>
 public class InkyController : PhantomController
 {
+    [Header("Movement custom rules")]
     public Transform blinky;
 
     private const float DISTANCE_OFFSET = 2f;

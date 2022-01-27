@@ -362,14 +362,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Maze
       objectReference: {fileID: 0}
-    - target: {fileID: 4605765280880848902, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
-      propertyPath: modeMaterials.m_Values.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 09c0d5c0c11b8664e92a55d58c355dac, type: 2}
-    - target: {fileID: 4605765280880848902, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
-      propertyPath: modeMaterials.m_Values.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 09c0d5c0c11b8664e92a55d58c355dac, type: 2}
+    - target: {fileID: 3390491578862308176, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
+      propertyPath: pelletRespawnLimit
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 5414947027448186487, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
+      propertyPath: pelletRespawnLimit
+      value: 24
+      objectReference: {fileID: 0}
     - target: {fileID: 5819575244039328386, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
       propertyPath: modeMaterials.m_Keys.Array.size
       value: 3
@@ -450,22 +450,10 @@ PrefabInstance:
       propertyPath: PlayerUIController
       value: 
       objectReference: {fileID: 901847466}
-    - target: {fileID: 7035068666471708895, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
-      propertyPath: modeMaterials.m_Values.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 09c0d5c0c11b8664e92a55d58c355dac, type: 2}
-    - target: {fileID: 7035068666471708895, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
-      propertyPath: modeMaterials.m_Values.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 09c0d5c0c11b8664e92a55d58c355dac, type: 2}
-    - target: {fileID: 8475632810509454669, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
-      propertyPath: modeMaterials.m_Values.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 09c0d5c0c11b8664e92a55d58c355dac, type: 2}
-    - target: {fileID: 8475632810509454669, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
-      propertyPath: modeMaterials.m_Values.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 09c0d5c0c11b8664e92a55d58c355dac, type: 2}
+    - target: {fileID: 8584259922291990412, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
+      propertyPath: pelletRespawnLimit
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
 --- !u!1001 &1247579372

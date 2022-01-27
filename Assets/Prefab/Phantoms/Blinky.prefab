@@ -87,6 +87,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  leaveIndex: 0
+  pelletLimit: 0
 --- !u!114 &3704653191967974937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,6 +104,8 @@ MonoBehaviour:
   Speed: 3
   StartingNode: {fileID: 0}
   Model: {fileID: 2710661685473875419}
+  canTriggerSpawn: 0
+  spawnDestination: {fileID: 0}
   fallbackDestination: {fileID: 0}
 --- !u!114 &8183166204758769955
 MonoBehaviour:
@@ -118,7 +122,7 @@ MonoBehaviour:
   body: {fileID: 7300433353963960359}
   eyes: {fileID: 4798245829055802656}
   modeMaterials:
-    keyData: 010000000200000003000000
+    keyData: 030000000200000004000000
     valueData:
     - {fileID: 2100000, guid: 09c0d5c0c11b8664e92a55d58c355dac, type: 2}
     - {fileID: 2100000, guid: 09c0d5c0c11b8664e92a55d58c355dac, type: 2}
@@ -147,7 +151,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7976289504784670883}
   m_LocalRotation: {x: 0, y: -0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: -0.1}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children:
   - {fileID: 3852385857483684534}

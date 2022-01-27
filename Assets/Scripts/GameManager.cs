@@ -23,9 +23,12 @@ public class GameManager
 
     public int Score { get => _score; set => _score = value; }
     public int LifesLeft { get => _lifesLeft; set => _lifesLeft = value; }
+    public int PhantomInHouse { get; private set; }
 
     public event Action PacmanDying;
     public event Action PhantomDying;
+    public event Action PhantomLeaving;
+    public event Action PelletCollected;
 
     // Configuration
     public float PowerUpDuration = 3f;
@@ -68,6 +71,7 @@ public class GameManager
     public void IncreaseScore(int points) {
         Score += points;
         OnScoreChangeAction();
+        PelletCollected?.Invoke();
     }
 
     public void DecreaseScore(int points)
@@ -102,6 +106,8 @@ public class GameManager
 
     public void EatPacman()
     {
+        PhantomInHouse = 0; // Reset count of phantoms (while be set again by phantoms)
+
         RemoveLife();
         PacmanDying?.Invoke();
 
@@ -121,6 +127,21 @@ public class GameManager
     public void EatPhantom()
     {
         PhantomDying?.Invoke();
+    }
+
+    public void EnterPhantomHouse()
+    {
+        PhantomInHouse++;
+    }
+
+    public void LeavePhantomHouse()
+    {
+        if (PhantomInHouse > 0)
+        {
+            PhantomInHouse--;
+
+            PhantomLeaving?.Invoke();
+        }
     }
 
     public void ChangeState(GameState newState) {
