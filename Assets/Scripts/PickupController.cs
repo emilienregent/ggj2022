@@ -20,7 +20,7 @@ public class PickupController : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag(GameManager.PACMAN_TAG))
         {
-            GameManager.Instance.IncreaseScore((int)_type);
+            GameManager.Instance.IncreaseScore((int)_type, this);
 
             if (_type == PickupType.Energizer)
             {

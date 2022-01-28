@@ -17,8 +17,9 @@ public class GameManager
 
     private int _score;
     private int _lifesLeft;
-    private List<GameObject> _pellets;
+    private float _pelletLimitBeforePop = 0.9f;
 
+    private List<PickupController> _pellets = new List<PickupController>();
     public int _totalPellets { get; private set; }
 
     public int Score { get => _score; set => _score = value; }
@@ -65,11 +66,36 @@ public class GameManager
     {
         _score = 0;
         _lifesLeft = Lifes;
+        _pellets = new List<PickupController>();
         ChangeState(GameState.PACMAN);
     }
 
-    public void IncreaseScore(int points) {
-        Score += points;
+    public void IncreaseScore(int points, PickupController pickupObject) {
+
+        if(CurrentState == GameState.PACMAN)
+        {
+
+            Score += points;
+
+            if(points == (int)PickupType.Pellet)
+            {
+                _pellets.Add(pickupObject);
+
+                if((_totalPellets * _pelletLimitBeforePop) < _pellets.Count)
+                {
+                    _pellets[0].EnableGameObject();
+                    _pellets.RemoveAt(0);
+                }
+            }
+        } else if(CurrentState == GameState.GHOST)
+        {
+            Score -= points;
+            if(Score < 0)
+            {
+                Score = 0;
+            }
+        }
+
         OnScoreChangeAction();
         PelletCollected?.Invoke();
     }
