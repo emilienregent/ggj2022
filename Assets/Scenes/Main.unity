@@ -267,7 +267,7 @@ PrefabInstance:
     - target: {fileID: 6872139901110548615, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
       propertyPath: PlayerUIController
       value: 
-      objectReference: {fileID: 1304560939}
+      objectReference: {fileID: 0}
     - target: {fileID: 7058480211945491324, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
@@ -280,6 +280,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8092400034357644327, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
+      propertyPath: Joystick
+      value: 
+      objectReference: {fileID: 1304560939}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
 --- !u!1001 &1304560938
@@ -473,6 +477,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6361737541607009002, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361737541607009002, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 150
+      objectReference: {fileID: 0}
     - target: {fileID: 7727032923295921273, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -501,13 +513,13 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
 --- !u!114 &1304560939 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 287187632180876796, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3886680219339428393, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
   m_PrefabInstance: {fileID: 1304560938}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aadb1bdc97878e4999849106d1c77b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ccb7bf622374cc4d9bce1457adf8179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1976395825
