@@ -51,12 +51,11 @@ public class VirtualJoystickHandler : MonoBehaviour, IDragHandler, IPointerUpHan
         position.y += p.y - 0.5f;
 
         // Clamp our values
-        float x = Mathf.Clamp(position.x, -1, 1); /*(JoystickContainer.rectTransform.pivot.x == 1f) ? position.x * 2 + 1 : position.x * 2 - 1;*/
-        float y = Mathf.Clamp(position.y, -1, 1);/*(JoystickContainer.rectTransform.pivot.y == 1f) ? position.y * 2 + 1 : position.y * 2 - 1;*/
+        float x = Mathf.Clamp(position.x, -1, 1);
+        float y = Mathf.Clamp(position.y, -1, 1);
+        InputDirection = new Vector3(x, y, 0).normalized;
 
-        InputDirection = new Vector3(x, y, 0);
-
-        Joystick.rectTransform.anchoredPosition = new Vector3(x * JoystickVisualDistance, y * JoystickVisualDistance);
+        Joystick.rectTransform.anchoredPosition = new Vector3(InputDirection.x * JoystickVisualDistance, InputDirection.y * JoystickVisualDistance);
 
     }
 
