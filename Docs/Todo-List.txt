@@ -41,8 +41,8 @@ Phase de jeu Fantôme
 	=> [DONE] Fantômes
 		=> [DONE] Reprendre la même chose que la phase Pac Man
 	=> Joueur (Fantôme)
-		=> [Gaëtan] Prendre le contrôle de Blinky
-		=> [Gaëtan] Déplacement
+		=> [Gaëtan] [DONE] Prendre le contrôle de Blinky
+		=> [Gaëtan] [DONE] Déplacement
 			=> Etape 1 : reprendre le même comportement que le joueur Pac Man
 				=> Déplacer PlayerController vers un GameObject qui aura une référence vers un model (PacMan ou Fantôme)
 				=> Faire en sorte que le Fantôme qui est contrôlé par le Player n'utilise pas le PhantomMovementController

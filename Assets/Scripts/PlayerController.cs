@@ -23,9 +23,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        // Do something when eaten
-        GameManager.Instance.PacmanDying += Respawn;
-
         // Do something when the Game State changes
         GameManager.Instance.OnChangeStateHandler += UpdateController;
     }
@@ -38,7 +35,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.Instance.PacmanDying -= Respawn;
         GameManager.Instance.OnChangeStateHandler -= UpdateController;
     }
 
@@ -83,15 +79,6 @@ public class PlayerController : MonoBehaviour
     private void SetNextDirectionLeft()
     {
         PlayerMovementController.SetNextDirection(DirectionEnum.Left);
-    }
-
-    private void Respawn()
-    {
-        if(GameManager.Instance.CurrentState == GameState.PACMAN)
-        {
-            SetNextDirectionLeft();
-            PlayerMovementController.ResetMovement();
-        }
     }
 
     public void UpdateController()
