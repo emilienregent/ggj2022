@@ -6,9 +6,16 @@ using UnityEngine.EventSystems;
 
 public class VirtualJoystickHandler : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-    public Vector3 InputDirection;
+
+    [Header("Configuration")]
+    public float JoystickVisualDistance = 50f;
+
+    [Header("UI References")]
     public Image Joystick;
     public Image JoystickContainer;
+
+    private Vector3 _inputDirection;
+    public Vector3 InputDirection { get => _inputDirection; set => _inputDirection = value; }
 
 
     // Start is called before the first frame update
@@ -33,24 +40,23 @@ public class VirtualJoystickHandler : MonoBehaviour, IDragHandler, IPointerUpHan
         Vector2 position = Vector2.zero;
 
         //To get InputDirection
-        RectTransformUtility.ScreenPointToLocalPointInRectangle
-                (JoystickContainer.rectTransform,
-                ped.position,
-                ped.pressEventCamera,
-                out position);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(JoystickContainer.rectTransform, ped.position, ped.pressEventCamera, out position);
 
         position.x = (position.x / JoystickContainer.rectTransform.sizeDelta.x);
         position.y = (position.y / JoystickContainer.rectTransform.sizeDelta.y);
 
-        float x = (JoystickContainer.rectTransform.pivot.x == 1f) ? position.x * 2 + 1 : position.x * 2 - 1;
-        float y = (JoystickContainer.rectTransform.pivot.y == 1f) ? position.y * 2 + 1 : position.y * 2 - 1;
+        // Pivot might be giving us an offset, adjust it here
+        Vector2 p = JoystickContainer.rectTransform.pivot;
+        position.x += p.x - 0.5f;
+        position.y += p.y - 0.5f;
+
+        // Clamp our values
+        float x = Mathf.Clamp(position.x, -1, 1); /*(JoystickContainer.rectTransform.pivot.x == 1f) ? position.x * 2 + 1 : position.x * 2 - 1;*/
+        float y = Mathf.Clamp(position.y, -1, 1);/*(JoystickContainer.rectTransform.pivot.y == 1f) ? position.y * 2 + 1 : position.y * 2 - 1;*/
 
         InputDirection = new Vector3(x, y, 0);
-        InputDirection = (InputDirection.magnitude > 1) ? InputDirection.normalized : InputDirection;
 
-        //to define the area in which joystick can move around
-        Joystick.rectTransform.anchoredPosition = new Vector3(InputDirection.x * (JoystickContainer.rectTransform.sizeDelta.x / 3)
-                                                               , InputDirection.y * (JoystickContainer.rectTransform.sizeDelta.y / 3));
+        Joystick.rectTransform.anchoredPosition = new Vector3(x * JoystickVisualDistance, y * JoystickVisualDistance);
 
     }
 
