@@ -38,4 +38,29 @@ public class BlinkyMovementController : PhantomMovementController
 
         base.ResetMovement();
     }
+
+    protected override void SetNextDirectionInCorner()
+    {
+        if (GameManager.Instance.CurrentState == GameState.PACMAN)
+        {
+            base.SetNextDirectionInCorner();
+        }
+    }
+
+    public override void ReverseDirection()
+    {
+        if (GameManager.Instance.CurrentState == GameState.PACMAN)
+        {
+            base.ReverseDirection();
+        }
+    }
+
+    public override void SetRandomDirection()
+    {
+        if (GameManager.Instance.CurrentState == GameState.PACMAN)
+        {
+            base.SetRandomDirection();
+        }
+    }
+
 }

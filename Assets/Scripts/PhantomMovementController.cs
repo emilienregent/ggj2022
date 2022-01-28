@@ -37,9 +37,7 @@ public class PhantomMovementController : MovementController
         // Corner force to follow the path
         else if (CurrentNode.IsCorner)
         {
-            var direction = CurrentNode.GetDirectionOut(CurrentDirection);
-
-            SetNextDirection(direction);
+            SetNextDirectionInCorner();
         }
         else if (CurrentNode.IsDeadEnd)
         {
@@ -48,6 +46,13 @@ public class PhantomMovementController : MovementController
 
         // Apply change of direction on destination
         base.EvaluateNextDirection();
+    }
+
+    protected virtual void SetNextDirectionInCorner()
+    {
+        var direction = CurrentNode.GetDirectionOut(CurrentDirection);
+
+        SetNextDirection(direction);
     }
 
     protected override void FallbackNextDirection()
@@ -103,7 +108,7 @@ public class PhantomMovementController : MovementController
         }
     }
 
-    public void SetRandomDirection()
+    public virtual void SetRandomDirection()
     {
         DirectionEnum newDirection = CurrentDirection;
 
@@ -115,7 +120,7 @@ public class PhantomMovementController : MovementController
         SetNextDirection(newDirection);
     }
 
-    public void ReverseDirection()
+    public virtual void ReverseDirection()
     {
         DirectionEnum oppositeDirection;
 
