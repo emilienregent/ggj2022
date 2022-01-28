@@ -49,8 +49,8 @@ public class VirtualJoystickHandler : MonoBehaviour, IDragHandler, IPointerUpHan
         InputDirection = (InputDirection.magnitude > 1) ? InputDirection.normalized : InputDirection;
 
         //to define the area in which joystick can move around
-        Joystick.rectTransform.anchoredPosition = new Vector3(InputDirection.x * (JoystickContainer.rectTransform.sizeDelta.x / 2)
-                                                               , InputDirection.y * (JoystickContainer.rectTransform.sizeDelta.y / 2));
+        Joystick.rectTransform.anchoredPosition = new Vector3(InputDirection.x * (JoystickContainer.rectTransform.sizeDelta.x / 3)
+                                                               , InputDirection.y * (JoystickContainer.rectTransform.sizeDelta.y / 3));
 
     }
 

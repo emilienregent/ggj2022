@@ -342,13 +342,13 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
 --- !u!114 &901847466 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 287187632180876796, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3886680219339428393, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
   m_PrefabInstance: {fileID: 901847465}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aadb1bdc97878e4999849106d1c77b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ccb7bf622374cc4d9bce1457adf8179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &957462551
@@ -448,6 +448,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6872139901110548615, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
       propertyPath: PlayerUIController
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092400034357644327, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
+      propertyPath: Joystick
       value: 
       objectReference: {fileID: 901847466}
     - target: {fileID: 8584259922291990412, guid: 98f6a4282f4ff9f4e961a436ff363756, type: 3}
