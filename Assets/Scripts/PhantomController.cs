@@ -267,6 +267,14 @@ public class PhantomController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(GameManager.Instance.CurrentState == GameState.GHOST && other.CompareTag(GameManager.GHOST_TAG))
+        {
+            // /!\ TODO : CHECKER QUE LE FANTÖME EST CONTROLE PAR LE JOUEUR /!\
+            // /!\ TODO : SI C'EST TOUJOURS BLINKY, CHECKER LE NOM DU GO ? /!\
+            GameManager.Instance.EatPhantom();
+            Respawn();
+        }
+
         if (other.CompareTag(GameManager.PACMAN_TAG))
         {
             if (_currentMode == MovementMode.Frightened)

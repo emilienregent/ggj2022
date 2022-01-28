@@ -14,6 +14,7 @@ public enum GameState {
 public class GameManager
 {
     public static string PACMAN_TAG = "Pacman";
+    public static string GHOST_TAG = "Ghost";
 
     private int _score;
     private int _lifesLeft;
