@@ -7,129 +7,146 @@ public class PlayerController : MonoBehaviour
 {
 
     private MovementController _playerMovementController;
-    //private SwipeDetector _playerSwipeDetector;
     private PowerUpBehavior _playerPowerUpBehavior;
     private VirtualJoystickInput _playerVirtualJoystick;
 
     public MovementController PlayerMovementController { get => _playerMovementController; set => _playerMovementController = value; }
-    //public SwipeDetector PlayerSwipeDetector { get => _playerSwipeDetector; set => _playerSwipeDetector = value; }
     public PowerUpBehavior PlayerPowerUpBehavior { get => _playerPowerUpBehavior; set => _playerPowerUpBehavior = value; }
     public VirtualJoystickInput PlayerVirtualJoystick { get => _playerVirtualJoystick; set => _playerVirtualJoystick = value; }
+
+    [Header("Game References")]
+    public GameObject CurrentController;
+    public MovementController PacMan;
+    public PhantomMovementController Blinky;
 
     //public InputUIController PlayerUIController;
 
     private void Awake()
     {
-        PlayerMovementController = GetComponent<MovementController>();
-
-        if(PlayerMovementController == null)
-        {
-            Debug.LogError("No MovementController found in the Player's components");
-        }
-
-        //PlayerSwipeDetector = GetComponent<SwipeDetector>();
-
-        //if(PlayerSwipeDetector == null)
-        //{
-        //    Debug.LogError("No SwipeDetector found in the Player's components");
-        //}
-
-        PlayerVirtualJoystick = GetComponent<VirtualJoystickInput>();
-
-        if(PlayerVirtualJoystick == null)
-        {
-            Debug.LogError("No VirtualJoystickHandler found in the Player's components");
-        }
-
-        PlayerPowerUpBehavior = GetComponent<PowerUpBehavior>();
-
-        if(PlayerPowerUpBehavior == null)
-        {
-            Debug.LogError("No PowerUpBehavior found in the Player's components");
-        }
-
-        //PlayerSwipeDetector.OnSwipeUpHandler += SetNextDirectionUp;
-        //PlayerSwipeDetector.OnSwipeRightHandler += SetNextDirectionRight;
-        //PlayerSwipeDetector.OnSwipeDownHandler += SetNextDirectionDown;
-        //PlayerSwipeDetector.OnSwipeLeftHandler += SetNextDirectionLeft;
-
         // Do something when eaten
         GameManager.Instance.PacmanDying += Respawn;
+
+        // Do something when the Game State changes
+        GameManager.Instance.OnChangeStateHandler += UpdateController;
     }
 
-    private void Update()
+    private void Start()
     {
-        if(PlayerVirtualJoystick.CurrentDirection != DirectionEnum.None && PlayerMovementController.CurrentDirection != PlayerVirtualJoystick.CurrentDirection)
-        {
-            PlayerMovementController.SetNextDirection(PlayerVirtualJoystick.CurrentDirection);
-        }
+        UpdateController();
+        LoadControllerComponents();
     }
 
     private void OnDestroy()
     {
-        //PlayerSwipeDetector.OnSwipeUpHandler -= SetNextDirectionUp;
-        //PlayerSwipeDetector.OnSwipeRightHandler -= SetNextDirectionRight;
-        //PlayerSwipeDetector.OnSwipeDownHandler -= SetNextDirectionDown;
-        //PlayerSwipeDetector.OnSwipeLeftHandler -= SetNextDirectionLeft;
-
         GameManager.Instance.PacmanDying -= Respawn;
+        GameManager.Instance.OnChangeStateHandler -= UpdateController;
+    }
+
+    private void Update()
+    {
+        if (PlayerMovementController.CurrentDirection != PlayerVirtualJoystick.CurrentDirection)
+        {
+            switch (PlayerVirtualJoystick.CurrentDirection)
+            {
+                case DirectionEnum.Up:
+                    SetNextDirectionUp();
+                    break;
+
+                case DirectionEnum.Right:
+                    SetNextDirectionRight();
+                    break;
+                case DirectionEnum.Down:
+                    SetNextDirectionDown();
+                    break;
+                case DirectionEnum.Left:
+                    SetNextDirectionLeft();
+                    break;
+            }
+        }
     }
 
     private void SetNextDirectionUp()
     {
         PlayerMovementController.SetNextDirection(DirectionEnum.Up);
-
-        //try
-        //{
-        //    PlayerUIController.UpdateInputFeedback(DirectionEnum.Up);
-        //} catch (Exception e)
-        //{
-        //    Debug.LogException(e);
-        //}
     }
 
     private void SetNextDirectionRight()
     {
         PlayerMovementController.SetNextDirection(DirectionEnum.Right);
-
-        //try
-        //{
-        //    PlayerUIController.UpdateInputFeedback(DirectionEnum.Right);
-        //} catch (Exception e)
-        //{
-        //    Debug.LogException(e);
-        //}
     }
 
     private void SetNextDirectionDown()
     {
         PlayerMovementController.SetNextDirection(DirectionEnum.Down);
-
-        //try
-        //{
-        //    PlayerUIController.UpdateInputFeedback(DirectionEnum.Down);
-        //} catch (Exception e)
-        //{
-        //    Debug.LogException(e);
-        //}
     }
 
     private void SetNextDirectionLeft()
     {
         PlayerMovementController.SetNextDirection(DirectionEnum.Left);
-
-        //try
-        //{
-        //    PlayerUIController.UpdateInputFeedback(DirectionEnum.Left);
-        //} catch(Exception e)
-        //{
-        //    Debug.LogException(e);
-        //}
     }
 
     private void Respawn()
     {
-        SetNextDirectionLeft();
-        PlayerMovementController.ResetMovement();
+        if(GameManager.Instance.CurrentState == GameState.PACMAN)
+        {
+            SetNextDirectionLeft();
+            PlayerMovementController.ResetMovement();
+        }
+    }
+
+    public void UpdateController()
+    {
+        switch(GameManager.Instance.CurrentState)
+        {
+            case GameState.PACMAN:
+                CurrentController = PacMan.gameObject;
+                LoadControllerComponents();
+                break;
+
+            case GameState.GHOST:
+                Debug.Log(Blinky);
+                CurrentController = Blinky.gameObject;
+                LoadControllerComponents();
+                break;
+        }
+    }
+
+    private void LoadControllerComponents()
+    {
+        switch(GameManager.Instance.CurrentState)
+        {
+            case GameState.PACMAN:
+                PlayerMovementController = CurrentController.GetComponent<MovementController>();
+
+                if (PlayerMovementController == null)
+                {
+                    Debug.LogError("No MovementController found in the Player's (PacMan) components");
+                }
+
+                PlayerVirtualJoystick = CurrentController.GetComponent<VirtualJoystickInput>();
+
+                if (PlayerVirtualJoystick == null)
+                {
+                    Debug.LogError("No VirtualJoystickHandler found in the Player's (PacMan) components");
+                }
+
+                PlayerPowerUpBehavior = CurrentController.GetComponent<PowerUpBehavior>();
+
+                if (PlayerPowerUpBehavior == null)
+                {
+                    Debug.LogError("No PowerUpBehavior found in the Player's (PacMan) components");
+                }
+                break;
+
+            case GameState.GHOST:
+                PlayerMovementController = CurrentController.GetComponent<PhantomMovementController>();
+
+                if (PlayerMovementController == null)
+                {
+                    Debug.LogError("No PhantomMovementController found in the Player's (Blinky) components");
+                }
+                break;
+        }
+
     }
 }

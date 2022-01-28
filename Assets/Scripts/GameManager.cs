@@ -31,6 +31,7 @@ public class GameManager
     public event Action PhantomDying;
     public event Action PhantomLeaving;
     public event Action PelletCollected;
+    public event Action OnChangeStateHandler;
 
     // Configuration
     public float PowerUpDuration = 3f;
@@ -135,19 +136,29 @@ public class GameManager
     {
         PhantomInHouse = 0; // Reset count of phantoms (while be set again by phantoms)
 
-        RemoveLife();
+        if(CurrentState == GameState.PACMAN)
+        {
+            RemoveLife();
+        }
+
         PacmanDying?.Invoke();
 
-        if(LifesLeft <= 0)
+        if (LifesLeft <= 0)
         {
-            if(CurrentState == GameState.PACMAN)
-            {
+            ChangeState(GameState.GAMEOVER);
+            SceneManager.LoadScene("GameOver");
+            return;
+        }
+
+        switch(CurrentState)
+        {
+            case GameState.PACMAN:
                 ChangeState(GameState.GHOST);
-            } else if(CurrentState == GameState.GHOST)
-            {
-                ChangeState(GameState.GAMEOVER);
-                SceneManager.LoadScene("GameOver");
-            }
+                break;
+
+            case GameState.GHOST:
+                ChangeState(GameState.PACMAN);
+                break;
         }
     }
 
@@ -174,5 +185,6 @@ public class GameManager
     public void ChangeState(GameState newState) {
         Debug.Log("SWITCH TO STATE " + newState.ToString());
         CurrentState = newState;
+        OnChangeStateHandler?.Invoke();
     }
 }

@@ -19,7 +19,7 @@ public class PhantomController : MonoBehaviour
     private const float SCATTER_DURATION = 7f;
     private const int SCATTER_TRESHOLD = 4;
 
-    public PlayerController target;
+    public GameObject target;
 
     [Header("Phantom house rules")]
     [Tooltip("Order index to leave the house. Lowest index first. 0 means already out.")]
@@ -118,7 +118,7 @@ public class PhantomController : MonoBehaviour
         EnterSpawnMode();
     }
 
-    private void SetNewDirection()
+    protected virtual void SetNewDirection()
     {
         if (_currentMode == MovementMode.Frightened)
         {
