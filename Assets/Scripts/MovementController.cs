@@ -1,3 +1,4 @@
+using System;
 using Unity.Collections;
 using UnityEngine;
 
@@ -42,6 +43,8 @@ public class MovementController : MonoBehaviour
     public NodeController DestinationNode { get => _destinationNode; set => _destinationNode = value; }
     public NodeController CurrentNode { get => _currentNode; set => _currentNode = value; }
     public DirectionEnum PreviousDirection { get => _previousDirection; set => _previousDirection = value; }
+
+    public event Action intersectionReached;
 
     private void Awake()
     {
@@ -102,6 +105,11 @@ public class MovementController : MonoBehaviour
         {
             SetNewDestination(destination);
         }
+    }
+
+    protected void ReachIntersection()
+    {
+        intersectionReached?.Invoke();
     }
 
     public void SetNextDirection(DirectionEnum newDirection)

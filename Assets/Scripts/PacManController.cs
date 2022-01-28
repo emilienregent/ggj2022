@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PacManController : MonoBehaviour
 {
-
-    private MovementController _movementController;
+    private PacManMovementController _movementController;
     private PowerUpBehavior _powerUpBehavior;
 
-    public MovementController MovementController { get => _movementController; set => _movementController = value; }
+    public PacManMovementController MovementController { get => _movementController; set => _movementController = value; }
     public PowerUpBehavior PowerUpBehavior { get => _powerUpBehavior; set => _powerUpBehavior = value; }
 
     private void Awake()
@@ -20,11 +17,21 @@ public class PacManController : MonoBehaviour
     private void OnDestroy()
     {
         GameManager.Instance.PacmanDying -= Respawn;
+
+        _movementController.intersectionReached -= SetNewDirection;
     }
 
     private void Start()
     {
         LoadControllerComponents();
+    }
+
+    private void SetNewDirection()
+    {
+        PickupController pellet = GameManager.Instance.GetRandomPellet();
+        Vector3 destination = pellet.transform.position;
+
+        _movementController.SetDirectionToDestination(destination);
     }
 
     private void Respawn()
@@ -35,11 +42,11 @@ public class PacManController : MonoBehaviour
 
     private void LoadControllerComponents()
     {
-        MovementController = GetComponent<MovementController>();
+        MovementController = GetComponent<PacManMovementController>();
 
         if (MovementController == null)
         {
-            Debug.LogError("No MovementController found in the PacMan components");
+            Debug.LogError("No PacManMovementController found in the PacMan components");
         }
 
         PowerUpBehavior = GetComponent<PowerUpBehavior>();
@@ -48,6 +55,7 @@ public class PacManController : MonoBehaviour
         {
             Debug.LogError("No PowerUpBehavior found in the PacMan components");
         }
-    }
 
+        _movementController.intersectionReached += SetNewDirection;
+    }
 }

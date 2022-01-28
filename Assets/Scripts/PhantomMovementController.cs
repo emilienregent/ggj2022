@@ -13,7 +13,6 @@ public class PhantomMovementController : MovementController
     protected const float SC_PHANTOM_WARP = 0.40f;
 
     public event Action spawnReached;
-    public event Action intersectionReached;
 
     [HideInInspector]
     public bool canTriggerSpawn;
@@ -32,7 +31,7 @@ public class PhantomMovementController : MovementController
         if (CurrentNode.IsIntersection)
         {
             // Check for target position to update direction
-            intersectionReached?.Invoke();
+            ReachIntersection();
         }
         // Corner force to follow the path
         else if (CurrentNode.IsCorner)

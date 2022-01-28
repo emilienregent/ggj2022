@@ -72,6 +72,11 @@ public class GameManager
         ChangeState(GameState.PACMAN);
     }
 
+    public PickupController GetRandomPellet()
+    {
+        return _pellets[UnityEngine.Random.Range(0, _pellets.Count)];
+    }
+
     public void IncreaseScore(int points, PickupController pickupObject) {
 
         if(CurrentState == GameState.PACMAN)
