@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 
 public enum DirectionEnum
@@ -15,15 +16,26 @@ public enum DirectionEnum
 
 public class MovementController : MonoBehaviour
 {
-    public float Speed = 4f;
-    public NodeController StartingNode;
+    // Coefficient applyied to speed
+    protected const float SC_PACMAN_NORMAL = 0.80f;
+    protected const float SC_PACMAN_PELLETS = 0.71f;
+    protected const float SC_PACMAN_FRIGHTENED = 0.90f;
+
+    private const int SPEED_REDUCTION_DURATION = 3; // In frame
+
     public Transform Model;
+    public NodeController StartingNode;
+
+    public float Speed = 4f;
+    [ReadOnly] public float CurrentSpeed = 0f;
 
     private DirectionEnum _previousDirection;
     private DirectionEnum _currentDirection;
     private DirectionEnum _nextDirection;
     private NodeController _destinationNode;
     private NodeController _currentNode;
+    private bool _hasSpeedReduced = false;
+    private int _speedReductionFrameCount = 0;
 
     public DirectionEnum CurrentDirection { get => _currentDirection; set => _currentDirection = value; }
     public DirectionEnum NextDirection { get => _nextDirection; set => _nextDirection = value; }
@@ -31,23 +43,35 @@ public class MovementController : MonoBehaviour
     public NodeController CurrentNode { get => _currentNode; set => _currentNode = value; }
     public DirectionEnum PreviousDirection { get => _previousDirection; set => _previousDirection = value; }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
+    {
+        PowerUpEvents.Instance.PowerUpPhaseStarting += SetFrightenedSpeed;
+        PowerUpEvents.Instance.PowerUpPhaseEnding += SetNormalSpeed;
+
+        GameManager.Instance.PelletCollected += SetPelletSpeed;
+    }
+    
+    private void Start()
     {
         ResetMovement();
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private void Update()
     {
         if(DestinationNode != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, DestinationNode.gameObject.transform.position, Speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, DestinationNode.gameObject.transform.position, CurrentSpeed * Time.deltaTime);
             if (transform.position.x == DestinationNode.gameObject.transform.position.x && transform.position.y == DestinationNode.gameObject.transform.position.y && transform.position.z == DestinationNode.gameObject.transform.position.z)
             {
                 CurrentNode = DestinationNode;
                 EvaluateNextDirection();
             }
+        }
+
+        if (++_speedReductionFrameCount > SPEED_REDUCTION_DURATION)
+        {
+            _hasSpeedReduced = false;
+            SetNormalSpeed();
         }
     }
 
@@ -138,9 +162,35 @@ public class MovementController : MonoBehaviour
         return false;
     }
 
+    protected virtual void SetNormalSpeed()
+    {
+        SetCurrentSpeed(SC_PACMAN_NORMAL);
+    }
+
+    protected virtual void SetFrightenedSpeed()
+    {
+        SetCurrentSpeed(SC_PACMAN_FRIGHTENED);
+    }
+
+    protected virtual void SetPelletSpeed()
+    {
+        if (!_hasSpeedReduced)
+        {
+            _hasSpeedReduced = true;
+            _speedReductionFrameCount = 0;
+
+            SetCurrentSpeed(SC_PACMAN_PELLETS);
+        }
+    }
+
+    protected virtual void SetCurrentSpeed(float speedCoefficient)
+    {
+        CurrentSpeed = Speed * speedCoefficient;
+    }
+
     protected virtual void UpdateRotation()
     {
-        // No model, no rotation
+        // Pas d'bras, pas d'chocolat
         if (Model == null)
         {
             return;
@@ -159,7 +209,6 @@ public class MovementController : MonoBehaviour
 
     public virtual void ResetMovement()
     {
-
         transform.position = StartingNode.gameObject.transform.position;
 
         PreviousDirection = DirectionEnum.Up;
@@ -167,9 +216,16 @@ public class MovementController : MonoBehaviour
         NextDirection = DirectionEnum.Left;
 
         UpdateRotation();
+        SetNormalSpeed();
 
         CurrentNode = StartingNode;
 
         EvaluateNextDirection();
+    }
+
+    private void OnDestroy()
+    {
+        PowerUpEvents.Instance.PowerUpPhaseStarting -= SetFrightenedSpeed;
+        PowerUpEvents.Instance.PowerUpPhaseEnding -= SetNormalSpeed;
     }
 }

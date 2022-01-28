@@ -167,7 +167,7 @@ public class PhantomController : MonoBehaviour
         Debug.Log($"Enter mode <color=yellow>{_currentMode}</color> on {gameObject.name}");
     }
 
-    private void LeaveSpawnMode()
+    protected virtual void LeaveSpawnMode()
     {
         _phantomMovementController.canTriggerSpawn = false;
 

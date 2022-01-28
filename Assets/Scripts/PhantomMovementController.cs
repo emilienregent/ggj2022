@@ -7,6 +7,11 @@ using UnityEngine;
 /// </summary>
 public class PhantomMovementController : MovementController
 {
+    // Coefficient applyied to speed
+    protected const float SC_PHANTOM_NORMAL = 0.75f;
+    protected const float SC_PHANTOM_FRIGHTENED = 0.50f;
+    protected const float SC_PHANTOM_WARP = 0.40f;
+
     public event Action spawnReached;
     public event Action intersectionReached;
 
@@ -156,6 +161,22 @@ public class PhantomMovementController : MovementController
 
         canTriggerSpawn = true;
 
+        SetNormalSpeed();
         EvaluateNextDirection();
+    }
+
+    protected override void SetNormalSpeed()
+    {
+        SetCurrentSpeed(SC_PHANTOM_NORMAL);
+    }
+
+    protected override void SetFrightenedSpeed()
+    {
+        SetCurrentSpeed(SC_PHANTOM_FRIGHTENED);
+    }
+
+    public void IncreaseSpeed()
+    {
+
     }
 }
