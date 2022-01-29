@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class PowerUpBehavior : MonoBehaviour
 {
-
     private const float TIME_INTERVAL = 1f;
+
+    public static bool IsEnabled = false;
 
     [ReadOnly, SerializeField] private float _lastInterval;
     [ReadOnly, SerializeField] private float _elapsedTime;
@@ -65,6 +66,8 @@ public class PowerUpBehavior : MonoBehaviour
 
     public void EnablePowerUp()
     {
+        IsEnabled = true;
+
         _powerUpStartTime = Time.time;
 
         PowerUpEvents.Instance.OnPowerUpPhaseStartingAction();
@@ -72,6 +75,8 @@ public class PowerUpBehavior : MonoBehaviour
 
     public void DisablePowerUp()
     {
+        IsEnabled = false;
+
         _powerUpStartTime = float.MaxValue;
 
         PowerUpEvents.Instance.OnPowerUpPhaseEndingAction();

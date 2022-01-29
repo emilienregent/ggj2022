@@ -33,7 +33,6 @@ public class PacManController : MonoBehaviour
 
     private void Respawn()
     {
-        _movementController.SetCurrentDestination();
         _movementController.SetNextDirection(DirectionEnum.Left);
         _movementController.ResetMovement();
     }

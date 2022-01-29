@@ -16,6 +16,7 @@ public class GameManager
 {
     public static string PACMAN_TAG = "Pacman";
     public static string GHOST_TAG = "Ghost";
+    public static string PELLET_TAG = "Pellet";
 
     private int _score;
     private int _lifesLeft;
@@ -59,7 +60,7 @@ public class GameManager
             {
                 _instance = new GameManager();
                 _instance.ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
-                _instance._pellets = GameObject.FindGameObjectsWithTag("Pellet");
+                _instance._pellets = GameObject.FindGameObjectsWithTag(PELLET_TAG);
                 _instance.totalCountPellets = _instance._pellets.Length;
                 _instance._availablePellets = new List<GameObject>(_instance._pellets);
                 _instance._collectedPellets = new List<PickupController>();
@@ -79,7 +80,7 @@ public class GameManager
 
 
         //ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
-        _pellets = GameObject.FindGameObjectsWithTag("Pellet");
+        _pellets = GameObject.FindGameObjectsWithTag(PELLET_TAG);
         _availablePellets = new List<GameObject>(_pellets);
     }
 
@@ -87,7 +88,7 @@ public class GameManager
     {
         if(_pellets.Length == 0)
         {
-            _pellets = GameObject.FindGameObjectsWithTag("Pellet");
+            _pellets = GameObject.FindGameObjectsWithTag(PELLET_TAG);
             _availablePellets = new List<GameObject>(_pellets);
         }
         return _availablePellets[UnityEngine.Random.Range(0, _availablePellets.Count)];

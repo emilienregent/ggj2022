@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum PickupType
@@ -8,6 +9,8 @@ public enum PickupType
 
 public class PickupController : MonoBehaviour
 {
+    public bool IsEnabled { get { return _collider.enabled; } }
+
     [SerializeField]
     private PickupType _type = PickupType.Pellet;
 

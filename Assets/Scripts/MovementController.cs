@@ -74,8 +74,6 @@ public class MovementController : MonoBehaviour
     
     private void Update()
     {
-        OnBeforeUpdate();
-
         if (DestinationNode != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, DestinationNode.gameObject.transform.position, CurrentSpeed * Time.deltaTime);
@@ -92,10 +90,6 @@ public class MovementController : MonoBehaviour
             _hasSpeedReduced = false;
             SetNormalSpeed();
         }
-    }
-
-    protected virtual void OnBeforeUpdate()
-    {
     }
 
     public virtual void EvaluateNextDirection()

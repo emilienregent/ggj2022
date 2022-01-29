@@ -3,34 +3,15 @@ using UnityEngine;
 
 public struct Path
 {
-    public bool IsValid;
+    public int PelletCount;
+    public bool HasPhantom;
     public NodeController Start;
     public List<NodeController> Nodes;
 }
 
 public class PacManMovementController : MovementController
 {
-    private const int INVALID_DIRECTION_DURATION = 4;
-
-    private Vector3 _finalDestination;
     private Dictionary<DirectionEnum, Path> _availablePaths = new Dictionary<DirectionEnum, Path>();
-    private int _invalidDirectionMask = 0;
-    private int _invalidDirectionEvaluationCount = 0;
-
-    protected override void OnBeforeUpdate()
-    {
-        if (Mathf.Approximately(transform.position.x, _finalDestination.x) && Mathf.Approximately(transform.position.z, _finalDestination.z))
-        {
-            SetCurrentDestination();
-        }
-    }
-
-    public void SetCurrentDestination()
-    {
-        GameObject pellet = GameManager.Instance.GetRandomPellet();
-
-        _finalDestination = pellet.transform.position;
-    }
 
     public override void EvaluateNextDirection()
     {
@@ -63,60 +44,72 @@ public class PacManMovementController : MovementController
     {
         DirectionEnum preferredDirection = GetPreferredDirection();
 
-        if (IsDirectionValid(preferredDirection))
+        if (preferredDirection != DirectionEnum.None)
         {
             SetNextDirection(preferredDirection);
         }
         else
         {
-            _invalidDirectionMask |= (int)preferredDirection;
-
-            SetNextDirection(CurrentDirection);
-        }
-
-        if (++_invalidDirectionEvaluationCount >= INVALID_DIRECTION_DURATION)
-        {
-            _invalidDirectionMask = 0;
-            _invalidDirectionEvaluationCount = 0;
-
-            //SetDirectionToDestination();
+            SetNextDirection(CurrentNode.GetRandomDirection());
         }
     }
 
     private DirectionEnum GetPreferredDirection()
     {
-        // Target is above us
-        if ((_invalidDirectionMask & (int)DirectionEnum.Up) == 0 && _finalDestination.z > transform.position.z)
+        int count = 0;
+        int maximumLength = 0;
+        int maximumPellet = 0;
+        int maximumWeight = -1;
+        DirectionEnum preferredDirection = DirectionEnum.None;
+
+        foreach (KeyValuePair<DirectionEnum, Path> pair in _availablePaths)
         {
-            return DirectionEnum.Up;
-        }
-        // Target is on our right
-        else if ((_invalidDirectionMask & (int)DirectionEnum.Right) == 0 && _finalDestination.x > transform.position.x)
-        {
-            return DirectionEnum.Right;
-        }
-        // Target is below us
-        else if ((_invalidDirectionMask & (int)DirectionEnum.Down) == 0 && _finalDestination.z < transform.position.z)
-        {
-            return DirectionEnum.Down;
-        }
-        // Target is on our left
-        else if ((_invalidDirectionMask & (int)DirectionEnum.Left) == 0 && _finalDestination.x < transform.position.x)
-        {
-            return DirectionEnum.Left;
+            Path path = pair.Value;
+            DirectionEnum direction = pair.Key;
+
+            int directionWeight = 0;
+
+            // Differentiate paths from their length first
+            if (path.Nodes.Count > maximumLength)
+            {
+                count++;
+                directionWeight += count;
+
+                maximumLength = path.Nodes.Count;
+            }
+
+            // If no phantom, aim for the most pellets
+            if (!path.HasPhantom)
+            {
+                directionWeight += _availablePaths.Count;
+
+                if (path.PelletCount > maximumPellet)
+                {
+                    directionWeight += path.PelletCount * 10;
+
+                    maximumPellet = path.PelletCount;
+                }
+            }
+            // Ensure to chase phantom
+            else if (PowerUpBehavior.IsEnabled)
+            {
+                directionWeight += 1000;
+            }
+
+            // Keep direction as last differientator
+            if (direction == CurrentDirection)
+            {
+                directionWeight *= 2;
+            }
+
+            if (directionWeight > maximumWeight)
+            {
+                preferredDirection = direction;
+                maximumWeight = directionWeight;
+            }
         }
 
-        return DirectionEnum.None;
-    }
-
-    private bool IsDirectionValid(DirectionEnum direction)
-    {
-        if (_availablePaths.TryGetValue(direction, out Path path))
-        {
-            return path.IsValid;
-        }
-
-        return false;
+        return preferredDirection;
     }
 
     private void FindPath()
@@ -143,9 +136,14 @@ public class PacManMovementController : MovementController
         if (node.TryGetNextNode(direction, out nextNode))
         {
             path.Nodes.Add(nextNode);
-            path.IsValid = !nextNode.HasPhantom();
+            path.HasPhantom = nextNode.HasPhantom();
 
-            if (path.IsValid)
+            if (nextNode.PickupItem != null && nextNode.PickupItem.IsEnabled)
+            {
+                path.PelletCount++;
+            }
+
+            if (!path.HasPhantom)
             {
                 SetNextPathNode(nextNode, direction, ref path);
             }
@@ -156,12 +154,9 @@ public class PacManMovementController : MovementController
     {
         if (GameManager.Instance.CurrentState == GameState.GHOST)
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawCube(_finalDestination + Vector3.up, Vector3.one);
-
             foreach (Path path in _availablePaths.Values)
             {
-                Gizmos.color = path.IsValid ? Color.green : Color.red;
+                Gizmos.color = path.HasPhantom ? Color.red : Color.green;
 
                 foreach(NodeController node in path.Nodes)
                 {

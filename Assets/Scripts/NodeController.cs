@@ -23,6 +23,8 @@ public class NodeController : MonoBehaviour
     public NodeController NodeDown { get => _nodeDown; set => _nodeDown = value; }
     public NodeController NodeLeft { get => _nodeLeft; set => _nodeLeft = value; }
 
+    public PickupController PickupItem { get; private set; }
+
     public List<DirectionEnum> Directions { get => _directions; private set => _directions = value; }
 
     /// <summary>
@@ -90,6 +92,7 @@ public class NodeController : MonoBehaviour
         _directionCount = Directions.Count;
 
         SetName();
+        TryGetItem();
     }
 
     private void SetName()
@@ -97,6 +100,17 @@ public class NodeController : MonoBehaviour
         if (gameObject.name == TAG_NODE)
         {
             gameObject.name = string.Format("{0} #{1}", TAG_NODE, NODE_ID++);
+        }
+    }
+
+    private void TryGetItem()
+    {
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), out RaycastHit hit, 1f))
+        {
+            if (hit.transform.gameObject.tag == GameManager.PELLET_TAG)
+            {
+                PickupItem = hit.transform.gameObject.GetComponent<PickupController>();
+            }
         }
     }
 

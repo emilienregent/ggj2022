@@ -90,10 +90,10 @@ public class PhantomController : MonoBehaviour
         if (IsNextToLeave)
         {
             _pelletCount++;
-            Debug.Log(gameObject);
-            Debug.Log(this);
+            //Debug.Log(gameObject);
+            //Debug.Log(this);
 
-            Debug.Log($"Still {pelletLimit - _pelletCount} pellet for {gameObject.name} to leave the house.");
+            //Debug.Log($"Still {pelletLimit - _pelletCount} pellet for {gameObject.name} to leave the house.");
 
             if (_pelletCount >= pelletLimit)
             {
