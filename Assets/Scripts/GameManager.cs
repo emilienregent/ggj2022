@@ -78,7 +78,7 @@ public class GameManager
         ChangeState(GameState.PACMAN);
 
 
-        ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
+        //ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
         _pellets = GameObject.FindGameObjectsWithTag("Pellet");
         _availablePellets = new List<GameObject>(_pellets);
     }

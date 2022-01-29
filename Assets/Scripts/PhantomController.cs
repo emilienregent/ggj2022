@@ -24,6 +24,7 @@ public class PhantomController : MonoBehaviour
     [Header("Phantom house rules")]
     [Tooltip("Order index to leave the house. Lowest index first. 0 means already out.")]
     public int leaveIndex;
+    private bool _isOut;
     [Tooltip("How many pellet have to be collected before leaving the phantom house")]
     public int pelletLimit;
 
@@ -55,6 +56,7 @@ public class PhantomController : MonoBehaviour
 
         GameManager.Instance.PacmanDying += Respawn;
 
+        _isOut = true;
         if (leaveIndex > 0)
         {
             EnterPhantomHouse();
@@ -88,6 +90,8 @@ public class PhantomController : MonoBehaviour
         if (IsNextToLeave)
         {
             _pelletCount++;
+            Debug.Log(gameObject);
+            Debug.Log(this);
 
             Debug.Log($"Still {pelletLimit - _pelletCount} pellet for {gameObject.name} to leave the house.");
 
@@ -100,20 +104,34 @@ public class PhantomController : MonoBehaviour
 
     private void EnterPhantomHouse()
     {
+        // Already in the house, do nothing
+        if(_isOut == false)
+        {
+            return;
+        }
+
         GameManager.Instance.EnterPhantomHouse();
 
+        Debug.Log($"{gameObject.name} enter the house ! Registering IncrementPelletCount");
         GameManager.Instance.PelletCollected += IncrementPelletCount;
+        _isOut = false;
 
         SetMode(MovementMode.None);
     }
 
     private void LeavePhantomHouse()
     {
+        // Already out of the house, do nothing
+        if(_isOut == true)
+        {
+            return;
+        }
+
         GameManager.Instance.LeavePhantomHouse();
 
+        Debug.Log($"{gameObject.name} is leaving the house ! Unregistering IncrementPelletCount");
         GameManager.Instance.PelletCollected -= IncrementPelletCount;
-
-        Debug.Log($"{gameObject.name} is leaving the house !");
+        _isOut = true;
 
         EnterSpawnMode();
     }
