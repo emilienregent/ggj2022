@@ -62,6 +62,7 @@ public class GameManager
                 _instance._pellets = GameObject.FindGameObjectsWithTag("Pellet");
                 _instance.totalCountPellets = _instance._pellets.Length;
                 _instance._availablePellets = new List<GameObject>(_instance._pellets);
+                _instance._collectedPellets = new List<PickupController>();
             }
             return _instance;
         }
@@ -75,10 +76,20 @@ public class GameManager
         _lifesLeft = Lifes;
         _collectedPellets = new List<PickupController>();
         ChangeState(GameState.PACMAN);
+
+
+        ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
+        _pellets = GameObject.FindGameObjectsWithTag("Pellet");
+        _availablePellets = new List<GameObject>(_pellets);
     }
 
     public GameObject GetRandomPellet()
     {
+        if(_pellets.Length == 0)
+        {
+            _pellets = GameObject.FindGameObjectsWithTag("Pellet");
+            _availablePellets = new List<GameObject>(_pellets);
+        }
         return _availablePellets[UnityEngine.Random.Range(0, _availablePellets.Count)];
     }
 
