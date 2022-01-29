@@ -10,7 +10,8 @@ public enum GameState {
     MENU,
     PACMAN,
     GHOST,
-    GAMEOVER
+    GAMEOVER,
+    VICTORY
 }
 
 public class GameManager
@@ -129,11 +130,7 @@ public class GameManager
         }
         else if(CurrentState == GameState.GHOST)
         {
-            Score -= points;
-            if(Score < 0)
-            {
-                Score = 0;
-            }
+            Score = Math.Max(0, Score - points);
         }
 
         OnScoreChangeAction();
@@ -141,8 +138,9 @@ public class GameManager
 
         if(_collectedPellets.Count == totalCountPellets)
         {
-            // /!\ TODO : WIN SCREEN /!\
-            ChangeState(GameState.GAMEOVER);
+            ChangeState(GameState.VICTORY);
+            SceneManager.LoadScene("Victory");
+            return;
         }
     }
 
