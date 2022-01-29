@@ -10,15 +10,18 @@ public class NodeController : MonoBehaviour
     private NodeController _nodeRight;
     private NodeController _nodeDown;
     private NodeController _nodeLeft;
+    private List<DirectionEnum> _directions = new List<DirectionEnum>();
 
-    public bool CanMoveUp { get { return (_directionMask & (int)DirectionEnum.Up) != 0; } }
-    public bool CanMoveRight { get { return (_directionMask & (int)DirectionEnum.Right) != 0; } }
-    public bool CanMoveDown { get { return (_directionMask & (int)DirectionEnum.Down) != 0; } }
-    public bool CanMoveLeft { get { return (_directionMask & (int)DirectionEnum.Left) != 0; } }
+    public bool CanMoveUp { get { return HasDirection(DirectionEnum.Up); } }
+    public bool CanMoveRight { get { return HasDirection(DirectionEnum.Right); } }
+    public bool CanMoveDown { get { return HasDirection(DirectionEnum.Down); } }
+    public bool CanMoveLeft { get { return HasDirection(DirectionEnum.Left); } }
     public NodeController NodeUp { get => _nodeUp; set => _nodeUp = value; }
     public NodeController NodeRight { get => _nodeRight; set => _nodeRight = value; }
     public NodeController NodeDown { get => _nodeDown; set => _nodeDown = value; }
     public NodeController NodeLeft { get => _nodeLeft; set => _nodeLeft = value; }
+
+    public List<DirectionEnum> Directions { get => _directions; private set => _directions = value; }
 
     /// <summary>
     /// A corner is a node with 2 direction but direction are not on the same axis
@@ -37,12 +40,12 @@ public class NodeController : MonoBehaviour
     [SerializeField]
     private int _directionMask = 0;
     private int _directionCount = 0;
-    private List<DirectionEnum> _directions = new List<DirectionEnum>();
+
+    private MovementController _controllerPresent;
 
     private const string TAG_NODE = "Node";
 
-    // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         RaycastHit hit;
         // Up Node
@@ -82,13 +85,33 @@ public class NodeController : MonoBehaviour
             }
         }
 
-        _directionCount = _directions.Count;
+        _directionCount = Directions.Count;
     }
 
     private void AddDirection(DirectionEnum direction)
     {
-        _directions.Add(direction);
+        Directions.Add(direction);
         _directionMask |= (int)direction;
+    }
+
+    public bool HasDirection(DirectionEnum direction)
+    {
+        return (_directionMask & (int)direction) != 0;
+    }
+
+    public bool HasPhantom()
+    {
+        return _controllerPresent != null && (_controllerPresent.GetType() == typeof(PhantomMovementController));
+    }
+
+    public void EnterNode(MovementController controller)
+    {
+        _controllerPresent = controller;
+    }
+
+    public void LeaveNode()
+    {
+        _controllerPresent = null;
     }
 
     /// <summary>
@@ -101,7 +124,7 @@ public class NodeController : MonoBehaviour
         // If entering with horizontal direction we want to get out with vertical direction and vice versa
         DirectionEnum axis = DirectionEnum.Horizontal.HasFlag(directionIn) ? DirectionEnum.Vertical : DirectionEnum.Horizontal;
 
-        foreach (var direction in _directions)
+        foreach (var direction in Directions)
         {
             // Stop if we find a direction on matching axis
             if (axis.HasFlag(direction))
@@ -115,8 +138,8 @@ public class NodeController : MonoBehaviour
 
     public DirectionEnum GetRandomDirection()
     {
-        int randomIndex = Random.Range(0, _directions.Count);
+        int randomIndex = Random.Range(0, Directions.Count);
 
-        return _directions[randomIndex];
+        return Directions[randomIndex];
     }
 }

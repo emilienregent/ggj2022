@@ -107,43 +107,6 @@ public class PhantomMovementController : MovementController
         }
     }
 
-    public virtual void SetRandomDirection()
-    {
-        DirectionEnum newDirection = CurrentDirection;
-
-        while (newDirection.Equals(CurrentDirection) && !CurrentNode.IsDeadEnd)
-        {
-            newDirection = CurrentNode.GetRandomDirection();
-        }
-
-        SetNextDirection(newDirection);
-    }
-
-    public virtual void ReverseDirection()
-    {
-        DirectionEnum oppositeDirection;
-
-        DirectionEnum currentAxis = DirectionEnum.Horizontal.HasFlag(CurrentDirection) ? DirectionEnum.Horizontal : DirectionEnum.Vertical;
-
-        if (currentAxis == DirectionEnum.Horizontal)
-        {
-            oppositeDirection = CurrentDirection == DirectionEnum.Left ? DirectionEnum.Right : DirectionEnum.Left;
-        }
-        else
-        {
-            oppositeDirection = CurrentDirection == DirectionEnum.Up ? DirectionEnum.Down : DirectionEnum.Up;
-        }
-
-        if (TryGetNextNode(oppositeDirection, out var node))
-        {
-            SetNextDirection(oppositeDirection);
-        }
-        else
-        {
-            SetRandomDirection();
-        }
-    }
-
     protected override void UpdateRotation()
     {
         // Do nothing for ghost

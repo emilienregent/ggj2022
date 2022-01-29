@@ -28,16 +28,14 @@ public class PacManController : MonoBehaviour
 
     private void SetNewDirection()
     {
-        PickupController pellet = GameManager.Instance.GetRandomPellet();
-        Vector3 destination = pellet.transform.position;
-
-        _movementController.SetDirectionToDestination(destination);
+        _movementController.SetDirectionToDestination();
     }
 
     private void Respawn()
     {
-        MovementController.SetNextDirection(DirectionEnum.Left);
-        MovementController.ResetMovement();
+        _movementController.SetCurrentDestination();
+        _movementController.SetNextDirection(DirectionEnum.Left);
+        _movementController.ResetMovement();
     }
 
     private void LoadControllerComponents()

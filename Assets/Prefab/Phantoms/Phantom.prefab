@@ -101,8 +101,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c7c825f7f520148ab46ac8c607d7d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartingNode: {fileID: 0}
   Model: {fileID: 2710661685473875419}
+  StartingNode: {fileID: 0}
   Speed: 4
   CurrentSpeed: 0
   canTriggerSpawn: 0

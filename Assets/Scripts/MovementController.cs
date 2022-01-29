@@ -40,9 +40,22 @@ public class MovementController : MonoBehaviour
 
     public DirectionEnum CurrentDirection { get => _currentDirection; set => _currentDirection = value; }
     public DirectionEnum NextDirection { get => _nextDirection; set => _nextDirection = value; }
-    public NodeController DestinationNode { get => _destinationNode; set => _destinationNode = value; }
-    public NodeController CurrentNode { get => _currentNode; set => _currentNode = value; }
     public DirectionEnum PreviousDirection { get => _previousDirection; set => _previousDirection = value; }
+    public NodeController DestinationNode { get => _destinationNode; set => _destinationNode = value; }
+    public NodeController CurrentNode
+    {
+        get => _currentNode;
+        set
+        {
+            if (_currentNode != null)
+            {
+                _currentNode.LeaveNode();
+            }
+
+            _currentNode = value;
+            _currentNode.EnterNode(this);
+        }
+    }
 
     public event Action intersectionReached;
 
@@ -61,10 +74,13 @@ public class MovementController : MonoBehaviour
     
     private void Update()
     {
-        if(DestinationNode != null)
+        OnBeforeUpdate();
+
+        if (DestinationNode != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, DestinationNode.gameObject.transform.position, CurrentSpeed * Time.deltaTime);
-            if (transform.position.x == DestinationNode.gameObject.transform.position.x && transform.position.y == DestinationNode.gameObject.transform.position.y && transform.position.z == DestinationNode.gameObject.transform.position.z)
+
+            if (Mathf.Approximately(Vector3.Distance(transform.position, DestinationNode.transform.position), 0f))
             {
                 CurrentNode = DestinationNode;
                 EvaluateNextDirection();
@@ -76,6 +92,10 @@ public class MovementController : MonoBehaviour
             _hasSpeedReduced = false;
             SetNormalSpeed();
         }
+    }
+
+    protected virtual void OnBeforeUpdate()
+    {
     }
 
     public virtual void EvaluateNextDirection()
@@ -105,6 +125,43 @@ public class MovementController : MonoBehaviour
         {
             SetNewDestination(destination);
         }
+    }
+
+    public virtual void ReverseDirection()
+    {
+        DirectionEnum oppositeDirection;
+
+        DirectionEnum currentAxis = DirectionEnum.Horizontal.HasFlag(CurrentDirection) ? DirectionEnum.Horizontal : DirectionEnum.Vertical;
+
+        if (currentAxis == DirectionEnum.Horizontal)
+        {
+            oppositeDirection = CurrentDirection == DirectionEnum.Left ? DirectionEnum.Right : DirectionEnum.Left;
+        }
+        else
+        {
+            oppositeDirection = CurrentDirection == DirectionEnum.Up ? DirectionEnum.Down : DirectionEnum.Up;
+        }
+
+        if (TryGetNextNode(oppositeDirection, out var node))
+        {
+            SetNextDirection(oppositeDirection);
+        }
+        else
+        {
+            SetRandomDirection();
+        }
+    }
+
+    public virtual void SetRandomDirection()
+    {
+        DirectionEnum newDirection = CurrentDirection;
+
+        while (newDirection.Equals(CurrentDirection) && !CurrentNode.IsDeadEnd)
+        {
+            newDirection = CurrentNode.GetRandomDirection();
+        }
+
+        SetNextDirection(newDirection);
     }
 
     protected void ReachIntersection()

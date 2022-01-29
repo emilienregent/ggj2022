@@ -20,8 +20,10 @@ public class GameManager
     private int _lifesLeft;
     private float _pelletLimitBeforePop = 0.9f;
 
-    private List<PickupController> _pellets = new List<PickupController>();
-    public int _totalPellets { get; private set; }
+    private GameObject[] _pellets;
+    private List<GameObject> _availablePellets = new List<GameObject>();
+    private List<PickupController> _collectedPellets = new List<PickupController>();
+    public int totalCountPellets { get; private set; }
 
     public int Score { get => _score; set => _score = value; }
     public int LifesLeft { get => _lifesLeft; set => _lifesLeft = value; }
@@ -56,7 +58,9 @@ public class GameManager
             {
                 _instance = new GameManager();
                 _instance.ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
-                _instance._totalPellets = GameObject.FindGameObjectsWithTag("Pellet").Length;
+                _instance._pellets = GameObject.FindGameObjectsWithTag("Pellet");
+                _instance.totalCountPellets = _instance._pellets.Length;
+                _instance._availablePellets = new List<GameObject>(_instance._pellets);
             }
             return _instance;
         }
@@ -68,33 +72,35 @@ public class GameManager
     {
         _score = 0;
         _lifesLeft = Lifes;
-        _pellets = new List<PickupController>();
+        _collectedPellets = new List<PickupController>();
         ChangeState(GameState.PACMAN);
     }
 
-    public PickupController GetRandomPellet()
+    public GameObject GetRandomPellet()
     {
-        return _pellets[UnityEngine.Random.Range(0, _pellets.Count)];
+        return _availablePellets[UnityEngine.Random.Range(0, _availablePellets.Count)];
     }
 
     public void IncreaseScore(int points, PickupController pickupObject) {
 
         if(CurrentState == GameState.PACMAN)
         {
-
             Score += points;
 
             if(points == (int)PickupType.Pellet)
             {
-                _pellets.Add(pickupObject);
+                _collectedPellets.Add(pickupObject);
+                _availablePellets.Remove(pickupObject.gameObject);
 
-                if((_totalPellets * _pelletLimitBeforePop) < _pellets.Count)
+                if ((totalCountPellets * _pelletLimitBeforePop) < _collectedPellets.Count)
                 {
-                    _pellets[0].EnableGameObject();
-                    _pellets.RemoveAt(0);
+                    _availablePellets.Add(_collectedPellets[0].gameObject);
+                    _collectedPellets[0].EnableGameObject();
+                    _collectedPellets.RemoveAt(0);
                 }
             }
-        } else if(CurrentState == GameState.GHOST)
+        }
+        else if(CurrentState == GameState.GHOST)
         {
             Score -= points;
             if(Score < 0)
