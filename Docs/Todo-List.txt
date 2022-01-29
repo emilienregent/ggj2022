@@ -59,8 +59,8 @@ Phase de jeu Fantôme
 				=> Si toutes les pastilles sont mangées = condition de victoire
 			=> Manger les power up
 		=> [Jérôme] Diminuer le score du joueur quand le Pac Man (IA) mange des pastilles
-Ecran de victoire
-	=> Bravo !
+[DONE] Ecran de victoire
+	=> [DONE] Bravo !
 Sound Effects + Musique
 Graphismes (intégration des assets)
 	=> [DONE] Model Pac Man

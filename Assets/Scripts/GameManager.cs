@@ -27,6 +27,7 @@ public class GameManager
     private GameObject[] _pellets;
     private List<GameObject> _availablePellets = new List<GameObject>();
     private List<PickupController> _collectedPellets = new List<PickupController>();
+    private int _collectedPelletsCounter = 0;
     public int totalCountPellets { get; private set; }
 
     public int Score { get => _score; set => _score = value; }
@@ -79,6 +80,7 @@ public class GameManager
         _score = 0;
         _lifesLeft = Lifes;
         _collectedPellets = new List<PickupController>();
+        _collectedPelletsCounter = 0;
         ChangeState(GameState.PACMAN);
 
         //ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
@@ -106,40 +108,32 @@ public class GameManager
         return _availablePellets[UnityEngine.Random.Range(0, _availablePellets.Count)];
     }
 
-    public void IncreaseScore(int points, PickupController pickupObject) {
+    public void IncreaseScore(int points) {
 
-        if(CurrentState == GameState.PACMAN)
+        Score += points;
+
+        if(points == (int)PickupType.Pellet)
         {
-            Score += points;
-
-            if(points == (int)PickupType.Pellet)
+            // Repop of pellets only if Pac-Man is the one eating them
+            if (CurrentState == GameState.PACMAN && (totalCountPellets * _pelletLimitBeforePop) < _collectedPellets.Count)
             {
-                _collectedPellets.Add(pickupObject);
-                _availablePellets.Remove(pickupObject.gameObject);
+                _availablePellets.Add(_collectedPellets[0].gameObject);
+                Random rnd = new Random();
+                int index = rnd.Next(0, _collectedPellets.Count - 30);
 
-                if ((totalCountPellets * _pelletLimitBeforePop) < _collectedPellets.Count)
-                {
-                    _availablePellets.Add(_collectedPellets[0].gameObject);
-                    Random rnd = new Random();
-                    int index = rnd.Next(0, _collectedPellets.Count - 30);
-
-                    _collectedPellets[index].EnableGameObject();
-                    _collectedPellets.RemoveAt(index);
-                }
+                _collectedPellets[index].EnableGameObject();
+                _collectedPellets.RemoveAt(index);
+                _collectedPelletsCounter--;
             }
-        }
-        else if(CurrentState == GameState.GHOST)
-        {
-            Score = Math.Max(0, Score - points);
         }
 
         OnScoreChangeAction();
         PelletCollected?.Invoke();
 
-        if(_collectedPellets.Count == totalCountPellets)
+        if(CurrentState == GameState.PACMAN && _collectedPelletsCounter == totalCountPellets)
         {
-            ChangeState(GameState.VICTORY);
-            SceneManager.LoadScene("Victory");
+            ChangeState(GameState.GAMEOVER);
+            SceneManager.LoadScene("GameOver");
             return;
         }
     }
@@ -148,6 +142,26 @@ public class GameManager
     {
         Score = Mathf.Max(0, Score - points);
         OnScoreChangeAction();
+    }
+
+    public void CollectPellet(PickupController pickupObject)
+    {
+        _collectedPelletsCounter++;
+        _collectedPellets.Add(pickupObject);
+        _availablePellets.Remove(pickupObject.gameObject);
+
+        CheckVictoryCondition();
+    }
+
+    public void CheckVictoryCondition()
+    {
+        Debug.Log("Collected Pellets = " + _collectedPelletsCounter + " / " + totalCountPellets);
+        if (CurrentState == GameState.GHOST && _collectedPelletsCounter == totalCountPellets)
+        {
+            ChangeState(GameState.VICTORY);
+            SceneManager.LoadScene("Victory");
+            return;
+        }
     }
 
     public event Action OnScoreChangeHandler;

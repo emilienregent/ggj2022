@@ -21,21 +21,32 @@ public class PickupController : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if(other.CompareTag(GameManager.PACMAN_TAG))
+
+        if(other.CompareTag(GameManager.PACMAN_TAG) == false)
         {
-            GameManager.Instance.IncreaseScore((int)_type, this);
-
-            if (_type == PickupType.Energizer)
-            {
-                PowerUpBehavior behavior = other.gameObject.GetComponent<PowerUpBehavior>();
-                if(behavior != null)
-                {
-                    behavior.EnablePowerUp();
-                }
-            }
-
-            DisableGameObject();
+            return;
         }
+
+        GameManager.Instance.CollectPellet(this);
+
+        if (GameManager.Instance.CurrentState == GameState.PACMAN)
+        {
+            GameManager.Instance.IncreaseScore((int)_type);
+        } else if(GameManager.Instance.CurrentState == GameState.GHOST)
+        {
+            GameManager.Instance.DecreaseScore((int)_type);
+        }
+
+        if (_type == PickupType.Energizer)
+        {
+            PowerUpBehavior behavior = other.gameObject.GetComponent<PowerUpBehavior>();
+            if(behavior != null)
+            {
+                behavior.EnablePowerUp();
+            }
+        }
+
+        DisableGameObject();
     }
 
     private void DisableGameObject() {
