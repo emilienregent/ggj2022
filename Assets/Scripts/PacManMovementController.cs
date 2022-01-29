@@ -128,6 +128,6 @@ public class PacManMovementController : MovementController
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawCube(_currentDestination, Vector3.one);
+        Gizmos.DrawCube(_currentDestination + Vector3.up, Vector3.one);
     }
 }

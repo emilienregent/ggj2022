@@ -101,7 +101,7 @@ public class NodeController : MonoBehaviour
 
     public bool HasPhantom()
     {
-        return _controllerPresent != null && (_controllerPresent.GetType() == typeof(PhantomMovementController));
+        return _controllerPresent != null && typeof(PhantomMovementController).IsAssignableFrom(_controllerPresent.GetType());
     }
 
     public void EnterNode(MovementController controller)
@@ -141,5 +141,11 @@ public class NodeController : MonoBehaviour
         int randomIndex = Random.Range(0, Directions.Count);
 
         return Directions[randomIndex];
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = HasPhantom() ? Color.red : Color.green;
+        Gizmos.DrawCube(Center.transform.position, Vector3.one);
     }
 }
