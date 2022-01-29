@@ -274,7 +274,7 @@ public class MovementController : MonoBehaviour
 
     public virtual void ResetMovement()
     {
-        transform.position = StartingNode.gameObject.transform.position;
+        SetStartingNode();
 
         PreviousDirection = DirectionEnum.Up;
         CurrentDirection = DirectionEnum.Left;
@@ -283,9 +283,14 @@ public class MovementController : MonoBehaviour
         UpdateRotation();
         SetNormalSpeed();
 
-        CurrentNode = StartingNode;
-
         EvaluateNextDirection();
+    }
+
+    protected virtual void SetStartingNode()
+    {
+        transform.position = StartingNode.gameObject.transform.position;
+
+        CurrentNode = StartingNode;
     }
 
     private void OnDestroy()

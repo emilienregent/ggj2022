@@ -151,17 +151,10 @@ public class PhantomMovementController : MovementController
 
     public override void ResetMovement()
     {
-        Vector3 spawnPoint = StartingNode.transform.position;
-
-        spawnPoint.y = transform.position.y;
-
-        transform.position = spawnPoint;
-
+        SetStartingNode();
+        
         transform.rotation = _startRotation;
         transform.localRotation = _startLocalRotation;
-        
-
-        CurrentNode = StartingNode;
 
         CurrentDirection = _defaultDirection;
         NextDirection = _defaultDirection;
@@ -170,6 +163,17 @@ public class PhantomMovementController : MovementController
         UpdateRotation();
         SetNormalSpeed();
         EvaluateNextDirection();
+    }
+
+    protected override void SetStartingNode()
+    {
+        Vector3 spawnPoint = StartingNode.transform.position;
+
+        spawnPoint.y = transform.position.y;
+
+        transform.position = spawnPoint;
+
+        CurrentNode = StartingNode;
     }
 
     protected override void SetNormalSpeed()
