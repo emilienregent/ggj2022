@@ -143,9 +143,4 @@ public class PhantomMovementController : MovementController
     {
         SetCurrentSpeed(SC_PHANTOM_FRIGHTENED);
     }
-
-    public void IncreaseSpeed()
-    {
-
-    }
 }

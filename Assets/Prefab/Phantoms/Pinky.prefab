@@ -125,4 +125,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   leaveIndex: 1
-  pelletLimit: 0
+  pelletLimit: 5
