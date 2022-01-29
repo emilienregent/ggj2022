@@ -4,7 +4,7 @@ using UnityEngine;
 public class CheatController : MonoBehaviour
 {
     [Button]
-    public void CheatKillPacMan()
+    public void CheatKillPlayer()
     {
         GameManager.Instance.EatPacman();
     }

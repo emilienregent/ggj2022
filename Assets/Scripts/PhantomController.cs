@@ -24,7 +24,7 @@ public class PhantomController : MonoBehaviour
     [Header("Phantom house rules")]
     [Tooltip("Order index to leave the house. Lowest index first. 0 means already out.")]
     public int leaveIndex;
-    private bool _isOut;
+    private bool _isOut = true;
     [Tooltip("How many pellet have to be collected before leaving the phantom house")]
     public int pelletLimit;
 
@@ -54,17 +54,9 @@ public class PhantomController : MonoBehaviour
         _phantomMovementController.spawnReached += LeaveSpawnMode;
         _phantomMovementController.intersectionReached += SetNewDirection;
 
-        GameManager.Instance.PacmanDying += Respawn;
+        GameManager.Instance.PacmanDying += Restart;
 
-        _isOut = true;
-        if (leaveIndex > 0)
-        {
-            EnterPhantomHouse();
-        }
-        else
-        {
-            LeaveSpawnMode();
-        }
+        InitializeSpawn();
     }
 
     private void Start()
@@ -77,23 +69,21 @@ public class PhantomController : MonoBehaviour
         _phantomMovementController.spawnReached -= LeaveSpawnMode;
         _phantomMovementController.intersectionReached -= SetNewDirection;
 
-        GameManager.Instance.PacmanDying -= Respawn;
-        GameManager.Instance.PelletCollected -= IncrementPelletCount;
+        GameManager.Instance.PacmanDying -= Restart;
+        GameManager.Instance.PelletCollected -= EvaluateNextToLeave;
 
         PowerUpEvents.Instance.TimeIntervalElapsed -= UpdateMode;
         PowerUpEvents.Instance.PowerUpPhaseStarting -= EnterFrightenedMode;
         PowerUpEvents.Instance.PowerUpPhaseEnding -= LeaveFrightenedMode;
     }
 
-    private void IncrementPelletCount()
+    private void EvaluateNextToLeave()
     {
         if (IsNextToLeave)
         {
             _pelletCount++;
-            //Debug.Log(gameObject);
-            //Debug.Log(this);
 
-            //Debug.Log($"Still {pelletLimit - _pelletCount} pellet for {gameObject.name} to leave the house.");
+            Debug.Log($"Still {pelletLimit - _pelletCount} pellet for {gameObject.name} to leave the house.");
 
             if (_pelletCount >= pelletLimit)
             {
@@ -104,8 +94,8 @@ public class PhantomController : MonoBehaviour
 
     private void EnterPhantomHouse()
     {
-        // Already in the house, do nothing
-        if(_isOut == false)
+        //Already in the house, do nothing
+        if (_isOut == false)
         {
             return;
         }
@@ -113,7 +103,7 @@ public class PhantomController : MonoBehaviour
         GameManager.Instance.EnterPhantomHouse();
 
         Debug.Log($"{gameObject.name} enter the house ! Registering IncrementPelletCount");
-        GameManager.Instance.PelletCollected += IncrementPelletCount;
+        GameManager.Instance.PelletCollected += EvaluateNextToLeave;
         _isOut = false;
 
         SetMode(MovementMode.None);
@@ -122,7 +112,7 @@ public class PhantomController : MonoBehaviour
     private void LeavePhantomHouse()
     {
         // Already out of the house, do nothing
-        if(_isOut == true)
+        if (_isOut == true)
         {
             return;
         }
@@ -130,7 +120,7 @@ public class PhantomController : MonoBehaviour
         GameManager.Instance.LeavePhantomHouse();
 
         Debug.Log($"{gameObject.name} is leaving the house ! Unregistering IncrementPelletCount");
-        GameManager.Instance.PelletCollected -= IncrementPelletCount;
+        GameManager.Instance.PelletCollected -= EvaluateNextToLeave;
         _isOut = true;
 
         EnterSpawnMode();
@@ -144,7 +134,8 @@ public class PhantomController : MonoBehaviour
         }
         else
         {
-            Vector3 destination = _currentMode == MovementMode.Spawn ? Vector3.forward * 1000f
+            Vector3 destination = _currentMode == MovementMode.None ? Vector3.forward * -1000f // Aim something they can't reach from ghost-house
+                : _currentMode == MovementMode.Spawn ? Vector3.forward * 1000f // Aim up to get out of the ghost-house
                 : _currentMode == MovementMode.Chase ? GetDestination() : _phantomMovementController.fallbackDestination.position;
 
             _phantomMovementController.SetDirectionToDestination(destination);
@@ -310,10 +301,8 @@ public class PhantomController : MonoBehaviour
         }
     }
 
-    private void Respawn()
+    private void InitializeSpawn()
     {
-        _phantomMovementController.ResetMovement();
-
         if (leaveIndex > 0)
         {
             EnterPhantomHouse();
@@ -322,5 +311,28 @@ public class PhantomController : MonoBehaviour
         {
             LeaveSpawnMode();
         }
+    }
+
+    /// <summary>
+    /// Stop movement and initialize spawn position in or out of the house
+    /// </summary>
+    private void Respawn()
+    {
+        _phantomMovementController.ResetMovement();
+
+        InitializeSpawn();
+    }
+
+    /// <summary>
+    /// Reset in/out flag to be sure we set the spawn properly
+    /// </summary>
+    private void Restart()
+    {
+        _isOut = true;
+
+        Debug.Log($"Restart {gameObject.name} ! Unregistering IncrementPelletCount");
+        GameManager.Instance.PelletCollected -= EvaluateNextToLeave;
+
+        Respawn();
     }
 }
