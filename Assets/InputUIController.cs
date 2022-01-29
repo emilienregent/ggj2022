@@ -1,15 +1,12 @@
-using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InputUIController : MonoBehaviour
 {
-    [TitleGroup("UI References")]
+    [Header("UI References")]
     public Image InputFeedback;
 
-    [TitleGroup("Ressources")]
+    [Header("Ressources")]
     public Sprite InputFeedbackUp;
     public Sprite InputFeedbackRight;
     public Sprite InputFeedbackDown;

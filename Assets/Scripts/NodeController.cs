@@ -1,5 +1,5 @@
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public class NodeController : MonoBehaviour

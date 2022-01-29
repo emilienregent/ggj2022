@@ -1,10 +1,8 @@
-using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Random = System.Random;
-using System.Collections;
 
 public enum GameState {
     MENU,
