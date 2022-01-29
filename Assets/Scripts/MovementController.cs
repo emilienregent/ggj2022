@@ -59,7 +59,7 @@ public class MovementController : MonoBehaviour
 
     public event Action intersectionReached;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         PowerUpEvents.Instance.PowerUpPhaseStarting += SetFrightenedSpeed;
         PowerUpEvents.Instance.PowerUpPhaseEnding += SetNormalSpeed;

@@ -105,6 +105,7 @@ MonoBehaviour:
   StartingNode: {fileID: 0}
   Speed: 4
   CurrentSpeed: 0
+  _currentDirection: 0
   canTriggerSpawn: 0
   spawnDestination: {fileID: 0}
   fallbackDestination: {fileID: 0}

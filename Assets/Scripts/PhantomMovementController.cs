@@ -20,7 +20,16 @@ public class PhantomMovementController : MovementController
     public Transform spawnDestination;
     public Transform fallbackDestination;
 
+    private Quaternion _startRotation;
+    private Quaternion _startLocalRotation;
+
     protected DirectionEnum _defaultDirection = DirectionEnum.Left;
+
+    protected override void Awake() {
+        base.Awake();
+        _startRotation = transform.rotation;
+        _startLocalRotation = transform.localRotation;
+    }
 
     public override void EvaluateNextDirection()
     {
@@ -111,7 +120,33 @@ public class PhantomMovementController : MovementController
 
     protected override void UpdateRotation()
     {
-        // Do nothing for ghost
+        // Pas d'bras, pas d'chocolat
+        if(Model == null)
+        {
+            return;
+        }
+
+        Quaternion rotation;
+        switch(CurrentDirection)
+        {
+            case DirectionEnum.Down:
+                rotation = Quaternion.Euler(270, 90, 270);
+                break;
+            case DirectionEnum.Up:
+                rotation = Quaternion.Euler(270, 90, 90);
+                break;
+            case DirectionEnum.Left:
+                rotation = Quaternion.Euler(270, 270, 0);
+                break;
+            case DirectionEnum.Right:
+                rotation = Quaternion.Euler(270, 90, 0);
+                break;
+            default:
+                rotation = Quaternion.Euler(270, 270, 270);
+                break;
+        }
+      
+        Model.localRotation = rotation;
     }
 
     public override void ResetMovement()
@@ -121,7 +156,10 @@ public class PhantomMovementController : MovementController
         spawnPoint.y = transform.position.y;
 
         transform.position = spawnPoint;
-        transform.rotation = Quaternion.identity;
+
+        transform.rotation = _startRotation;
+        transform.localRotation = _startLocalRotation;
+        
 
         CurrentNode = StartingNode;
 
@@ -129,7 +167,7 @@ public class PhantomMovementController : MovementController
         NextDirection = _defaultDirection;
 
         canTriggerSpawn = true;
-
+        UpdateRotation();
         SetNormalSpeed();
         EvaluateNextDirection();
     }
