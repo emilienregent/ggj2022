@@ -10,6 +10,7 @@ public class HUDController : MonoBehaviour
 
     // UI References
     public Text Score;
+    public Text Goal;
     public GridLayoutGroup Lifes;
 
     private List<GameObject> _lifeInstances = new List<GameObject>();
@@ -26,19 +27,36 @@ public class HUDController : MonoBehaviour
         }
         GameManager.Instance.OnScoreChangeHandler += UpdateScoreDisplay;
         GameManager.Instance.OnLifeChangeHandler += UpdateLifeDisplay;
-        GameManager.Instance.OnChangeStateHandler += UpdateLifeDisplay;
+        GameManager.Instance.OnChangeStateHandler += ChangeHUDState;
     }
 
     private void OnDestroy()
     {
         GameManager.Instance.OnScoreChangeHandler -= UpdateScoreDisplay;
         GameManager.Instance.OnLifeChangeHandler -= UpdateLifeDisplay;
-        GameManager.Instance.OnChangeStateHandler -= UpdateLifeDisplay;
+        GameManager.Instance.OnChangeStateHandler -= ChangeHUDState;
     }
 
     private void UpdateScoreDisplay()
     {
         Score.text = "Score : " + GameManager.Instance.Score.ToString("d5");
+    }
+
+    private void ChangeHUDState()
+    {
+        switch(GameManager.Instance.CurrentState)
+        {
+            case GameState.PACMAN:
+                Goal.text = "Don't die !";
+                Goal.color = new Color32(254, 227, 15, 255);
+                break;
+
+            case GameState.GHOST:
+                Goal.text = "Eat Pac-Man !";
+                Goal.color = new Color32(254, 0, 0, 255);
+                break;
+        }
+        UpdateLifeDisplay();
     }
 
     private void UpdateLifeDisplay()
