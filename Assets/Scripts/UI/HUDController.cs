@@ -26,12 +26,14 @@ public class HUDController : MonoBehaviour
         }
         GameManager.Instance.OnScoreChangeHandler += UpdateScoreDisplay;
         GameManager.Instance.OnLifeChangeHandler += UpdateLifeDisplay;
+        GameManager.Instance.OnChangeStateHandler += UpdateLifeDisplay;
     }
 
     private void OnDestroy()
     {
         GameManager.Instance.OnScoreChangeHandler -= UpdateScoreDisplay;
         GameManager.Instance.OnLifeChangeHandler -= UpdateLifeDisplay;
+        GameManager.Instance.OnChangeStateHandler -= UpdateLifeDisplay;
     }
 
     private void UpdateScoreDisplay()
@@ -41,6 +43,13 @@ public class HUDController : MonoBehaviour
 
     private void UpdateLifeDisplay()
     {
+
+        Color32 newColor = new Color32(255, 255, 255, 255);
+        if(GameManager.Instance.CurrentState == GameState.GHOST)
+        {
+            newColor = new Color32(255, 255, 255, 128);
+        }
+
         for(int i = 0; i < LifeInstances.Count; i++)
         {
             if(i >= GameManager.Instance.LifesLeft)
@@ -49,6 +58,7 @@ public class HUDController : MonoBehaviour
             } else
             {
                 LifeInstances[i].SetActive(true);
+                LifeInstances[i].GetComponent<Image>().color = newColor;
             }
         }
     }
