@@ -10,7 +10,8 @@ public class HUDController : MonoBehaviour
 
     // UI References
     public Text Score;
-    public Text Goal;
+    public GoalBannerController GoalControllerPacMan;
+    public GoalBannerController GoalControllerBlinky;
     public GridLayoutGroup Lifes;
 
     private List<GameObject> _lifeInstances = new List<GameObject>();
@@ -53,10 +54,14 @@ public class HUDController : MonoBehaviour
         switch(GameManager.Instance.CurrentState)
         {
             case GameState.PACMAN:
+                GoalControllerBlinky.gameObject.SetActive(false);
+                GoalControllerPacMan.gameObject.SetActive(true);
                 StartCoroutine(AnimatePacmanStateStart());
                 break;
 
             case GameState.GHOST:
+                GoalControllerPacMan.gameObject.SetActive(false);
+                GoalControllerBlinky.gameObject.SetActive(true);
                 StartCoroutine(AnimateGhostStateStart());
                 break;
         }
@@ -66,21 +71,26 @@ public class HUDController : MonoBehaviour
     private IEnumerator AnimatePacmanStateStart()
     {
         GameManager.Instance.PauseGame();
-        Goal.color = new Color32(254, 227, 15, 255);
-        Goal.text = "Ready ?";
+        GoalControllerPacMan.Goal.color = new Color32(254, 227, 15, 255);
+        GoalControllerPacMan.Goal.text = "Ready ?";
+        yield return new WaitForSecondsRealtime(1);
+        GoalControllerPacMan.Goal.text = "Don't die !";
         yield return new WaitForSecondsRealtime(2);
         GameManager.Instance.ResumeGame();
-        Goal.text = "Don't die !";
+        GoalControllerPacMan.gameObject.SetActive(false);
     }
 
     private IEnumerator AnimateGhostStateStart()
     {
         GameManager.Instance.PauseGame();
-        Goal.color = new Color32(254, 0, 0, 255);
-        Goal.text = "Ready ?";
+        GoalControllerBlinky.Goal.color = new Color32(254, 0, 0, 255);
+        GoalControllerBlinky.Goal.text = "Ready ?";
+        yield return new WaitForSecondsRealtime(1);
+        GoalControllerBlinky.Goal.text = "Eat Pac-Man !";
         yield return new WaitForSecondsRealtime(2);
         GameManager.Instance.ResumeGame();
-        Goal.text = "Eat Pac-Man !";
+        GoalControllerBlinky.gameObject.SetActive(false);
+
     }
 
     private void UpdateLifeDisplay()
