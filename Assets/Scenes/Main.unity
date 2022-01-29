@@ -468,6 +468,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 971888340828378209, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1855631803588118648, guid: 5730076a571b36b4688dcc5e67021bf0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

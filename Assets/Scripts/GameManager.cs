@@ -174,8 +174,6 @@ public class GameManager
             RemoveLife();
         }
 
-        PacmanDying?.Invoke();
-
         if (LifesLeft <= 0)
         {
             ChangeState(GameState.GAMEOVER);
@@ -193,6 +191,8 @@ public class GameManager
                 ChangeState(GameState.PACMAN);
                 break;
         }
+
+        PacmanDying?.Invoke();
     }
 
     public void EatPhantom()

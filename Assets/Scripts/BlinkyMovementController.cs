@@ -36,7 +36,17 @@ public class BlinkyMovementController : PhantomMovementController
     {
         _pelletCount = 0;
 
+        if(GameManager.Instance.CurrentState == GameState.GHOST)
+        {
+            _defaultDirection = DirectionEnum.None;
+            DestinationNode = StartingNode;
+        } else
+        {
+            _defaultDirection = DirectionEnum.Left;
+        }
+
         base.ResetMovement();
+
     }
 
     protected override void SetNextDirectionInCorner()

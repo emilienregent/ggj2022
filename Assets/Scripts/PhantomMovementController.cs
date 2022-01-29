@@ -20,6 +20,8 @@ public class PhantomMovementController : MovementController
     public Transform spawnDestination;
     public Transform fallbackDestination;
 
+    protected DirectionEnum _defaultDirection = DirectionEnum.Left;
+
     public override void EvaluateNextDirection()
     {
         if (canTriggerSpawn && CurrentNode.transform.position.Equals(spawnDestination.position))
@@ -123,8 +125,8 @@ public class PhantomMovementController : MovementController
 
         CurrentNode = StartingNode;
 
-        CurrentDirection = DirectionEnum.Left;
-        NextDirection = DirectionEnum.Left;
+        CurrentDirection = _defaultDirection;
+        NextDirection = _defaultDirection;
 
         canTriggerSpawn = true;
 
