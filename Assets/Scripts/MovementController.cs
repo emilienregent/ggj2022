@@ -66,7 +66,7 @@ public class MovementController : MonoBehaviour
 
         GameManager.Instance.PelletCollected += SetPelletSpeed;
     }
-    
+        
     private void Start()
     {
         ResetMovement();
@@ -292,5 +292,7 @@ public class MovementController : MonoBehaviour
     {
         PowerUpEvents.Instance.PowerUpPhaseStarting -= SetFrightenedSpeed;
         PowerUpEvents.Instance.PowerUpPhaseEnding -= SetNormalSpeed;
+
+        GameManager.Instance.PelletCollected -= SetPelletSpeed;
     }
 }

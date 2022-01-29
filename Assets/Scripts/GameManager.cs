@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using Random = System.Random;
 
 public enum GameState {
     MENU,
@@ -95,8 +96,11 @@ public class GameManager
                 if ((totalCountPellets * _pelletLimitBeforePop) < _collectedPellets.Count)
                 {
                     _availablePellets.Add(_collectedPellets[0].gameObject);
-                    _collectedPellets[0].EnableGameObject();
-                    _collectedPellets.RemoveAt(0);
+                    Random rnd = new Random();
+                    int index = rnd.Next(0, _collectedPellets.Count - 30);
+
+                    _collectedPellets[index].EnableGameObject();
+                    _collectedPellets.RemoveAt(index);
                 }
             }
         }
