@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NodeController : MonoBehaviour
 {
+    private static uint NODE_ID = 1;
+
     public GameObject Center;
 
     private NodeController _nodeUp;
@@ -86,6 +88,16 @@ public class NodeController : MonoBehaviour
         }
 
         _directionCount = Directions.Count;
+
+        SetName();
+    }
+
+    private void SetName()
+    {
+        if (gameObject.name == TAG_NODE)
+        {
+            gameObject.name = string.Format("{0} #{1}", TAG_NODE, NODE_ID++);
+        }
     }
 
     private void AddDirection(DirectionEnum direction)
@@ -143,9 +155,60 @@ public class NodeController : MonoBehaviour
         return Directions[randomIndex];
     }
 
+    public bool TryGetNextNode(DirectionEnum direction, out NodeController nextNode)
+    {
+        nextNode = null;
+
+        if (direction == DirectionEnum.None)
+        {
+            return false;
+        }
+
+        switch (direction)
+        {
+            case DirectionEnum.Up:
+            if (CanMoveUp == true)
+            {
+                nextNode = NodeUp;
+                return true;
+            }
+            break;
+
+            case DirectionEnum.Right:
+            if (CanMoveRight == true)
+            {
+                nextNode = NodeRight;
+                return true;
+            }
+            break;
+
+            case DirectionEnum.Down:
+            if (CanMoveDown == true)
+            {
+                nextNode = NodeDown;
+                return true;
+            }
+            break;
+
+            case DirectionEnum.Left:
+            if (CanMoveLeft == true)
+            {
+                nextNode = NodeLeft;
+                return true;
+            }
+            break;
+        }
+
+        return false;
+    }
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = HasPhantom() ? Color.red : Color.green;
-        Gizmos.DrawCube(Center.transform.position, Vector3.one);
+        Gizmos.color = Color.red;
+
+        if (HasPhantom())
+        {
+            Gizmos.DrawSphere(Center.transform.position, 1f);
+        }
     }
 }

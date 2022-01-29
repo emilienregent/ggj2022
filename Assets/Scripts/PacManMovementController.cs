@@ -1,12 +1,25 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public struct Path
+{
+    public bool IsValid;
+    public NodeController Start;
+    public List<NodeController> Nodes;
+}
 
 public class PacManMovementController : MovementController
 {
-    private Vector3 _currentDestination;
+    private const int INVALID_DIRECTION_DURATION = 4;
+
+    private Vector3 _finalDestination;
+    private Dictionary<DirectionEnum, Path> _availablePaths = new Dictionary<DirectionEnum, Path>();
+    private int _invalidDirectionMask = 0;
+    private int _invalidDirectionEvaluationCount = 0;
 
     protected override void OnBeforeUpdate()
     {
-        if (Mathf.Approximately(transform.position.x, _currentDestination.x) && Mathf.Approximately(transform.position.z, _currentDestination.z))
+        if (Mathf.Approximately(transform.position.x, _finalDestination.x) && Mathf.Approximately(transform.position.z, _finalDestination.z))
         {
             SetCurrentDestination();
         }
@@ -16,13 +29,15 @@ public class PacManMovementController : MovementController
     {
         GameObject pellet = GameManager.Instance.GetRandomPellet();
 
-        _currentDestination = pellet.transform.position;
+        _finalDestination = pellet.transform.position;
     }
 
     public override void EvaluateNextDirection()
     {
         if (GameManager.Instance.CurrentState == GameState.GHOST)
         {
+            FindPath();
+
             // Reaching intersection need destination reevaluation
             if (CurrentNode.IsIntersection)
             {
@@ -43,91 +58,116 @@ public class PacManMovementController : MovementController
 
     /// <summary>
     /// Compare position to target to find new direction
-    /// <remarks>Can't use the direction where we come from</remarks>
     /// </summary>
     public void SetDirectionToDestination()
     {
-        DirectionEnum direction = DirectionEnum.None;
-        DirectionEnum directionWithoutPhantom = GetDirectionWithoutPhantom();
-        NodeController node;
+        DirectionEnum preferredDirection = GetPreferredDirection();
 
-        // Target is above us
-        if (_currentDestination.z > transform.position.z
-            && CurrentDirection != DirectionEnum.Down
-            && TryGetNextNode(DirectionEnum.Up, out node)
-            && directionWithoutPhantom.HasFlag(DirectionEnum.Up))
+        if (IsDirectionValid(preferredDirection))
         {
-            direction = DirectionEnum.Up;
-        }
-        // Target is below us
-        else if (_currentDestination.z < transform.position.z
-            && CurrentDirection != DirectionEnum.Up
-            && TryGetNextNode(DirectionEnum.Down, out node)
-            && directionWithoutPhantom.HasFlag(DirectionEnum.Down))
-        {
-            direction = DirectionEnum.Down;
-        }
-        // Target is on our left
-        else if (_currentDestination.x < transform.position.x
-            && CurrentDirection != DirectionEnum.Right
-            && TryGetNextNode(DirectionEnum.Left, out node)
-            && directionWithoutPhantom.HasFlag(DirectionEnum.Left))
-        {
-            direction = DirectionEnum.Left;
-        }
-        // Target is on our right
-        else if (_currentDestination.x > transform.position.x
-            && CurrentDirection != DirectionEnum.Left
-            && TryGetNextNode(DirectionEnum.Right, out node)
-            && directionWithoutPhantom.HasFlag(DirectionEnum.Right))
-        {
-            direction = DirectionEnum.Right;
-        }
-
-        // If we end up with a valid direction
-        if (direction != DirectionEnum.None)
-        {
-            SetNextDirection(direction);
+            SetNextDirection(preferredDirection);
         }
         else
         {
-            ReverseDirection();
+            _invalidDirectionMask |= (int)preferredDirection;
+
+            SetNextDirection(CurrentDirection);
+        }
+
+        if (++_invalidDirectionEvaluationCount >= INVALID_DIRECTION_DURATION)
+        {
+            _invalidDirectionMask = 0;
+            _invalidDirectionEvaluationCount = 0;
+
+            //SetDirectionToDestination();
         }
     }
 
-    private DirectionEnum GetDirectionWithoutPhantom()
+    private DirectionEnum GetPreferredDirection()
     {
-        DirectionEnum mask = DirectionEnum.None;
-
-        foreach (DirectionEnum direction in CurrentNode.Directions)
+        // Target is above us
+        if ((_invalidDirectionMask & (int)DirectionEnum.Up) == 0 && _finalDestination.z > transform.position.z)
         {
-            if (!NodeHasPhantom(CurrentNode, direction))
-            {
-                mask |= direction;
-            }
+            return DirectionEnum.Up;
+        }
+        // Target is on our right
+        else if ((_invalidDirectionMask & (int)DirectionEnum.Right) == 0 && _finalDestination.x > transform.position.x)
+        {
+            return DirectionEnum.Right;
+        }
+        // Target is below us
+        else if ((_invalidDirectionMask & (int)DirectionEnum.Down) == 0 && _finalDestination.z < transform.position.z)
+        {
+            return DirectionEnum.Down;
+        }
+        // Target is on our left
+        else if ((_invalidDirectionMask & (int)DirectionEnum.Left) == 0 && _finalDestination.x < transform.position.x)
+        {
+            return DirectionEnum.Left;
         }
 
-        return mask;
+        return DirectionEnum.None;
     }
 
-    private bool NodeHasPhantom(NodeController node, DirectionEnum direction)
+    private bool IsDirectionValid(DirectionEnum direction)
     {
-        if (node.HasPhantom())
+        if (_availablePaths.TryGetValue(direction, out Path path))
         {
-            return true;
-        }
-
-        if (TryGetNextNode(direction, out NodeController nextNode))
-        {
-            return nextNode.HasPhantom();
+            return path.IsValid;
         }
 
         return false;
     }
 
+    private void FindPath()
+    {
+        _availablePaths.Clear();
+
+        foreach (DirectionEnum direction in CurrentNode.Directions)
+        {
+            Path path = new Path() { Nodes = new List<NodeController>() };
+
+            if (CurrentNode.TryGetNextNode(direction, out path.Start))
+            {
+                SetNextPathNode(path.Start, direction, ref path);
+
+                _availablePaths[direction] = path;
+            }
+        }
+    }
+
+    private void SetNextPathNode(NodeController node, DirectionEnum direction, ref Path path)
+    {
+        NodeController nextNode;
+
+        if (node.TryGetNextNode(direction, out nextNode))
+        {
+            path.Nodes.Add(nextNode);
+            path.IsValid = !nextNode.HasPhantom();
+
+            if (path.IsValid)
+            {
+                SetNextPathNode(nextNode, direction, ref path);
+            }
+        }
+    }
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawCube(_currentDestination + Vector3.up, Vector3.one);
+        if (GameManager.Instance.CurrentState == GameState.GHOST)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawCube(_finalDestination + Vector3.up, Vector3.one);
+
+            foreach (Path path in _availablePaths.Values)
+            {
+                Gizmos.color = path.IsValid ? Color.green : Color.red;
+
+                foreach(NodeController node in path.Nodes)
+                {
+                    Gizmos.DrawCube(node.transform.position, Vector3.one);
+                }
+            }
+        }
     }
 }
