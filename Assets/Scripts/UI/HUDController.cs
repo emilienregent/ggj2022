@@ -17,6 +17,13 @@ public class HUDController : MonoBehaviour
 
     public List<GameObject> LifeInstances { get => _lifeInstances; set => _lifeInstances = value; }
 
+    private void Awake()
+    {
+        GameManager.Instance.OnScoreChangeHandler += UpdateScoreDisplay;
+        GameManager.Instance.OnLifeChangeHandler += UpdateLifeDisplay;
+        GameManager.Instance.OnChangeStateHandler += ChangeHUDState;
+    }
+
     private void Start()
     {
         for(int i = 0; i < GameManager.Instance.LifesLeft; i++)
@@ -25,9 +32,8 @@ public class HUDController : MonoBehaviour
             GameObject life = Instantiate(LifePrefab, Lifes.transform.position, Quaternion.identity, Lifes.gameObject.transform) as GameObject;
             LifeInstances.Add(life);
         }
-        GameManager.Instance.OnScoreChangeHandler += UpdateScoreDisplay;
-        GameManager.Instance.OnLifeChangeHandler += UpdateLifeDisplay;
-        GameManager.Instance.OnChangeStateHandler += ChangeHUDState;
+
+        ChangeHUDState();
     }
 
     private void OnDestroy()
@@ -47,16 +53,34 @@ public class HUDController : MonoBehaviour
         switch(GameManager.Instance.CurrentState)
         {
             case GameState.PACMAN:
-                Goal.text = "Don't die !";
-                Goal.color = new Color32(254, 227, 15, 255);
+                StartCoroutine(AnimatePacmanStateStart());
                 break;
 
             case GameState.GHOST:
-                Goal.text = "Eat Pac-Man !";
-                Goal.color = new Color32(254, 0, 0, 255);
+                StartCoroutine(AnimateGhostStateStart());
                 break;
         }
         UpdateLifeDisplay();
+    }
+
+    private IEnumerator AnimatePacmanStateStart()
+    {
+        GameManager.Instance.PauseGame();
+        Goal.color = new Color32(254, 227, 15, 255);
+        Goal.text = "Ready ?";
+        yield return new WaitForSecondsRealtime(2);
+        GameManager.Instance.ResumeGame();
+        Goal.text = "Don't die !";
+    }
+
+    private IEnumerator AnimateGhostStateStart()
+    {
+        GameManager.Instance.PauseGame();
+        Goal.color = new Color32(254, 0, 0, 255);
+        Goal.text = "Ready ?";
+        yield return new WaitForSecondsRealtime(2);
+        GameManager.Instance.ResumeGame();
+        Goal.text = "Eat Pac-Man !";
     }
 
     private void UpdateLifeDisplay()

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Random = System.Random;
+using System.Collections;
 
 public enum GameState {
     MENU,
@@ -42,6 +43,7 @@ public class GameManager
     public int Lifes = 3;
 
     public GameState CurrentState { get; private set; }
+    public bool IsPaused = false;
 
     #region SINGLETON
     // Static singleton instance
@@ -78,10 +80,19 @@ public class GameManager
         _collectedPellets = new List<PickupController>();
         ChangeState(GameState.PACMAN);
 
-
         //ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
         _pellets = GameObject.FindGameObjectsWithTag(PELLET_TAG);
         _availablePellets = new List<GameObject>(_pellets);
+    }
+
+    public void PauseGame()
+    {
+        IsPaused = true;
+    }
+
+    public void ResumeGame()
+    {
+        IsPaused = false;
     }
 
     public GameObject GetRandomPellet()

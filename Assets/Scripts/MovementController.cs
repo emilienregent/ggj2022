@@ -74,6 +74,12 @@ public class MovementController : MonoBehaviour
     
     private void Update()
     {
+        // No movement during pause
+        if(GameManager.Instance.IsPaused == true)
+        {
+            return;
+        }
+
         if (DestinationNode != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, DestinationNode.gameObject.transform.position, CurrentSpeed * Time.deltaTime);
