@@ -126,6 +126,12 @@ public class GameManager
 
         OnScoreChangeAction();
         PelletCollected?.Invoke();
+
+        if(_collectedPellets.Count == totalCountPellets)
+        {
+            // /!\ TODO : WIN SCREEN /!\
+            ChangeState(GameState.GAMEOVER);
+        }
     }
 
     public void DecreaseScore(int points)
