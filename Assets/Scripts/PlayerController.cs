@@ -40,6 +40,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if(GameManager.Instance.CurrentState != GameState.PACMAN && GameManager.Instance.CurrentState != GameState.GHOST)
+        {
+            return;
+        }
+
         if (PlayerMovementController.CurrentDirection != PlayerVirtualJoystick.CurrentDirection)
         {
             switch (PlayerVirtualJoystick.CurrentDirection)
