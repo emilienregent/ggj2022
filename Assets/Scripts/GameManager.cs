@@ -71,6 +71,12 @@ public class GameManager
 
     public void RestartGame()
     {
+        ResetGameData();
+        ChangeState(GameState.START);
+    }
+
+    public void ResetGameData()
+    {
         _score = 0;
         _lifesLeft = Lifes;
         _collectedPellets = new List<PickupController>();
@@ -78,7 +84,6 @@ public class GameManager
         _pellets = GameObject.FindGameObjectsWithTag(PELLET_TAG);
         _availablePellets = new List<GameObject>(_pellets);
         totalCountPellets = _pellets.Length;
-        ChangeState(GameState.START);
     }
 
     public void PauseGame()

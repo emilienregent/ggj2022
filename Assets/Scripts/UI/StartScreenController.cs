@@ -77,6 +77,7 @@ public class StartScreenController : MonoBehaviour
 
     public void StartGame()
     {
+        GameManager.Instance.ResetGameData();
         GameManager.Instance.ResumeGame();
         GameManager.Instance.ChangeState(GameState.PACMAN);
     }
