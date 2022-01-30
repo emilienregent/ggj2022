@@ -4,6 +4,7 @@ using UnityEngine;
 public struct Path
 {
     public int PelletCount;
+    public int VisitedNodes;
     public bool HasPhantom;
     public NodeController Start;
     public List<NodeController> Nodes;
@@ -13,10 +14,19 @@ public class PacManMovementController : MovementController
 {
     private Dictionary<DirectionEnum, Path> _availablePaths = new Dictionary<DirectionEnum, Path>();
 
+    private Dictionary<NodeController, int> _visitedNodes = new Dictionary<NodeController, int>();
+
     public override void EvaluateNextDirection()
     {
         if (GameManager.Instance.CurrentState == GameState.GHOST)
         {
+            if(_visitedNodes.ContainsKey(CurrentNode) == false)
+            {
+                _visitedNodes.Add(CurrentNode, 1);
+            } else
+            {
+                _visitedNodes[CurrentNode] *= 2;
+            }
             FindPath();
 
             // Reaching intersection need destination reevaluation
@@ -43,7 +53,7 @@ public class PacManMovementController : MovementController
     public void SetDirectionToDestination()
     {
         DirectionEnum preferredDirection = GetPreferredDirection();
-
+       
         if (preferredDirection != DirectionEnum.None)
         {
             SetNextDirection(preferredDirection);
@@ -78,6 +88,11 @@ public class PacManMovementController : MovementController
                 maximumLength = path.Nodes.Count;
             }
 
+            if(path.Start.PickupItem != null && path.Start.PickupItem.gameObject.activeSelf)
+            {
+                directionWeight += 100;
+            }
+
             // If no phantom, aim for the most pellets
             if (!path.HasPhantom)
             {
@@ -94,6 +109,12 @@ public class PacManMovementController : MovementController
             else if (PowerUpBehavior.IsEnabled)
             {
                 directionWeight += 1000;
+            }
+
+            // Already visited node are less important
+            if(path.PelletCount <= 0 && _visitedNodes.ContainsKey(path.Start))
+            {
+                directionWeight -= _visitedNodes[path.Start];
             }
 
             // Keep direction as last differientator
@@ -147,6 +168,11 @@ public class PacManMovementController : MovementController
             {
                 SetNextPathNode(nextNode, direction, ref path);
             }
+
+            if(_visitedNodes.ContainsKey(nextNode))
+            {
+                path.VisitedNodes++;
+            }
         }
     }
 
@@ -160,6 +186,17 @@ public class PacManMovementController : MovementController
 
                 foreach(NodeController node in path.Nodes)
                 {
+                    if(path.HasPhantom == false)
+                    {
+                        if(_visitedNodes.ContainsKey(node))
+                    {
+                        Gizmos.color = Color.cyan;
+                    } else
+                    {
+                        Gizmos.color = Color.green;
+                    }
+                    }
+
                     Gizmos.DrawCube(node.transform.position, Vector3.one);
                 }
             }
