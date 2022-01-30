@@ -8,16 +8,17 @@ public class GoalBannerController : MonoBehaviour
 
     public Text Goal;
 
-
-    // Start is called before the first frame update
-    void Start()
+    public void StartAnimation()
     {
-        
+        ResetScale();
+        gameObject.SetActive(true);
+        LeanTween.scale(gameObject, Vector3.one, 0.75f).setEaseOutElastic();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ResetScale()
     {
-        
+        LeanTween.scale(gameObject, Vector3.zero, 0);
+        gameObject.SetActive(false);
     }
+
 }

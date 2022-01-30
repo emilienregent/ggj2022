@@ -1,11 +1,10 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Random = System.Random;
 
 public enum GameState {
-    MENU,
+    START,
     PACMAN,
     GHOST,
     GAMEOVER,
@@ -43,6 +42,7 @@ public class GameManager
     public int Lifes = 3;
 
     public GameState CurrentState { get; private set; }
+    public GameState PreviousState { get; private set; }
     public bool IsPaused = false;
 
     #region SINGLETON
@@ -51,7 +51,7 @@ public class GameManager
 
     protected GameManager()
     {
-        RestartGame();
+        
     }
 
     public static GameManager Instance
@@ -61,11 +61,7 @@ public class GameManager
             if (_instance == null)
             {
                 _instance = new GameManager();
-                _instance.ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
-                _instance._pellets = GameObject.FindGameObjectsWithTag(PELLET_TAG);
-                _instance.totalCountPellets = _instance._pellets.Length;
-                _instance._availablePellets = new List<GameObject>(_instance._pellets);
-                _instance._collectedPellets = new List<PickupController>();
+                _instance.RestartGame();
             }
             return _instance;
         }
@@ -79,11 +75,10 @@ public class GameManager
         _lifesLeft = Lifes;
         _collectedPellets = new List<PickupController>();
         _collectedPelletsCounter = 0;
-        ChangeState(GameState.PACMAN);
-
-        //ChangeState(GameState.PACMAN); // /!\ TODO : STATE MENU WHEN AVAILABLE /!\
         _pellets = GameObject.FindGameObjectsWithTag(PELLET_TAG);
         _availablePellets = new List<GameObject>(_pellets);
+        totalCountPellets = _pellets.Length;
+        ChangeState(GameState.START);
     }
 
     public void PauseGame()
@@ -131,7 +126,6 @@ public class GameManager
         if(CurrentState == GameState.PACMAN && _collectedPelletsCounter == totalCountPellets)
         {
             ChangeState(GameState.GAMEOVER);
-            SceneManager.LoadScene("GameOver");
             return;
         }
     }
@@ -158,7 +152,6 @@ public class GameManager
         if (CurrentState == GameState.GHOST && _collectedPelletsCounter == (totalCountPellets))
         {
             ChangeState(GameState.VICTORY);
-            SceneManager.LoadScene("Victory");
             return;
         }
     }
@@ -199,7 +192,6 @@ public class GameManager
         if (LifesLeft <= 0)
         {
             ChangeState(GameState.GAMEOVER);
-            SceneManager.LoadScene("GameOver");
             return;
         }
 
@@ -238,6 +230,9 @@ public class GameManager
     }
 
     public void ChangeState(GameState newState) {
+
+        Debug.Log("SWITCH TO STATE " + newState.ToString());
+        PreviousState = CurrentState;
         CurrentState = newState;
         OnChangeStateHandler?.Invoke();
     }

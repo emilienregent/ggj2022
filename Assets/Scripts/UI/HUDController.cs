@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour
@@ -46,7 +47,7 @@ public class HUDController : MonoBehaviour
 
     private void UpdateScoreDisplay()
     {
-        Score.text = "Score : " + GameManager.Instance.Score.ToString("d5");
+        Score.text = GameManager.Instance.Score.ToString("d5");
     }
 
     private void ChangeHUDState()
@@ -55,17 +56,41 @@ public class HUDController : MonoBehaviour
         {
             case GameState.PACMAN:
                 GoalControllerBlinky.gameObject.SetActive(false);
-                GoalControllerPacMan.gameObject.SetActive(true);
+                GoalControllerPacMan.StartAnimation();
                 StartCoroutine(AnimatePacmanStateStart());
                 break;
 
             case GameState.GHOST:
                 GoalControllerPacMan.gameObject.SetActive(false);
-                GoalControllerBlinky.gameObject.SetActive(true);
+                GoalControllerBlinky.StartAnimation();
                 StartCoroutine(AnimateGhostStateStart());
+                break;
+
+            case GameState.GAMEOVER:
+                StartCoroutine(AnimateGameOver());
+                break;
+
+            case GameState.VICTORY:
+                StartCoroutine(AnimateVictory());
                 break;
         }
         UpdateLifeDisplay();
+    }
+
+    private IEnumerator AnimateVictory()
+    {
+        GameManager.Instance.PauseGame();
+        yield return new WaitForSecondsRealtime(1);
+        GameManager.Instance.ResumeGame();
+        SceneManager.LoadScene("Victory");
+    }
+
+    private IEnumerator AnimateGameOver()
+    {
+        GameManager.Instance.PauseGame();
+        yield return new WaitForSecondsRealtime(1);
+        GameManager.Instance.ResumeGame();
+        SceneManager.LoadScene("GameOver");
     }
 
     private IEnumerator AnimatePacmanStateStart()
@@ -75,9 +100,9 @@ public class HUDController : MonoBehaviour
         GoalControllerPacMan.Goal.text = "Ready ?";
         yield return new WaitForSecondsRealtime(1);
         GoalControllerPacMan.Goal.text = "Don't die !";
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(1);
         GameManager.Instance.ResumeGame();
-        GoalControllerPacMan.gameObject.SetActive(false);
+        GoalControllerPacMan.ResetScale();
     }
 
     private IEnumerator AnimateGhostStateStart()
@@ -87,9 +112,9 @@ public class HUDController : MonoBehaviour
         GoalControllerBlinky.Goal.text = "Ready ?";
         yield return new WaitForSecondsRealtime(1);
         GoalControllerBlinky.Goal.text = "Eat Pac-Man !";
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(1);
         GameManager.Instance.ResumeGame();
-        GoalControllerBlinky.gameObject.SetActive(false);
+        GoalControllerBlinky.ResetScale();
 
     }
 
