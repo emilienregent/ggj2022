@@ -33,11 +33,43 @@ public class StartScreenController : MonoBehaviour
         if(GameManager.Instance.CurrentState == GameState.START)
         {
             Wrapper.SetActive(true);
+            StartCoroutine(AnimateBlinky());
             GameManager.Instance.PauseGame();
         } else if(GameManager.Instance.PreviousState == GameState.START)
         {
+            StopAllCoroutines();
             Wrapper.SetActive(false);
         }
+    }
+
+    private IEnumerator AnimateBlinky()
+    {
+        bool isLookingRight = false;
+
+        while(true)
+        {
+            if(isLookingRight == true)
+            {
+                RotateBlinkyLeft();
+                isLookingRight = false;
+            } else
+            {
+                RotateBlinkyRight();
+                isLookingRight = true;
+            }
+            yield return new WaitForSecondsRealtime(1);
+            
+        }
+    }
+
+    private void RotateBlinkyLeft()
+    {
+        LeanTween.rotateY(BlinkyLogo.gameObject, 0f, 0f);
+    }
+
+    private void RotateBlinkyRight()
+    {
+        LeanTween.rotateY(BlinkyLogo.gameObject, 180f, 0f);
     }
 
     public void StartGame()

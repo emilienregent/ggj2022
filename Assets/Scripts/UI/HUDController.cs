@@ -100,7 +100,7 @@ public class HUDController : MonoBehaviour
         GoalControllerPacMan.Goal.text = "Ready ?";
         yield return new WaitForSecondsRealtime(1);
         GoalControllerPacMan.Goal.text = "Don't die !";
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(1);
         GameManager.Instance.ResumeGame();
         GoalControllerPacMan.gameObject.SetActive(false);
     }
@@ -112,7 +112,7 @@ public class HUDController : MonoBehaviour
         GoalControllerBlinky.Goal.text = "Ready ?";
         yield return new WaitForSecondsRealtime(1);
         GoalControllerBlinky.Goal.text = "Eat Pac-Man !";
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(1);
         GameManager.Instance.ResumeGame();
         GoalControllerBlinky.gameObject.SetActive(false);
 
