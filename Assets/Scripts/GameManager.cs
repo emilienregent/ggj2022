@@ -154,7 +154,7 @@ public class GameManager
     public void CheckVictoryCondition()
     {
         Debug.Log("Collected Pellets = " + _collectedPelletsCounter + " / " + totalCountPellets);
-        if (CurrentState == GameState.GHOST && _collectedPelletsCounter == totalCountPellets)
+        if (CurrentState == GameState.GHOST && _collectedPelletsCounter == (totalCountPellets + 4))
         {
             ChangeState(GameState.VICTORY);
             SceneManager.LoadScene("Victory");
