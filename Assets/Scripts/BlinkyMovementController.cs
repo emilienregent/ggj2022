@@ -20,6 +20,8 @@ public class BlinkyMovementController : PhantomMovementController
             transform.position = spawnPoint;
 
             CurrentNode = AlternativeStartingNode;
+
+            CurrentSpeed = Mathf.Min(CurrentSpeed + Speed * SC_PELLET_INCREASE, MaximumSpeed);
         }
         else
         {
@@ -47,14 +49,13 @@ public class BlinkyMovementController : PhantomMovementController
     protected override void SetCurrentSpeed(float speedCoefficient)
     {
         CurrentSpeed = Speed * speedCoefficient;
-
+        
         // Reapply speed increase from pellets
         CurrentSpeed = Mathf.Min(CurrentSpeed + Speed * SC_PELLET_INCREASE * _pelletCount, MaximumSpeed);
     }
 
     public override void ResetMovement()
     {
-        _pelletCount = 0;
 
         if(GameManager.Instance.CurrentState == GameState.GHOST)
         {
