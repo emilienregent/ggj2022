@@ -49,6 +49,7 @@ MonoBehaviour:
   backgroundMusicSource: {fileID: 1114095540578594659}
   StartMenuMusic: {fileID: 8300000, guid: ae1952d417cca2d4184cab39e925b287, type: 3}
   GameMusic: {fileID: 8300000, guid: 036ca4b1a57871c468dc527608b3596e, type: 3}
+  VictoryMusic: {fileID: 8300000, guid: d6ea3fc8fdd7a0247a4a6c74489cb4e4, type: 3}
   PacmanEatingSFX: {fileID: 8300000, guid: c4f0f3f511e2b1142b8eab36e2c5795b, type: 3}
   PacmanDeathSFX: {fileID: 8300000, guid: 45ce7d163b8d8df45bbdf9b5bb8e7d2b, type: 3}
   GhostDeathSFX: {fileID: 8300000, guid: 40d1927ceb23f5442bca1e87ac855293, type: 3}

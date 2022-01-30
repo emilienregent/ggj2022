@@ -8,9 +8,11 @@ public class SoundBox : MonoBehaviour
     public AudioSource backgroundMusicSource;
     public AudioClip StartMenuMusic;
     public AudioClip GameMusic;
+    public AudioClip VictoryMusic;
     public AudioClip PacmanEatingSFX;
     public AudioClip PacmanDeathSFX;
     public AudioClip GhostDeathSFX;
+
 
     private bool _isPowerUp = false;
 
@@ -48,6 +50,17 @@ public class SoundBox : MonoBehaviour
                 break;
             case GameState.PACMAN:
             case GameState.GHOST:
+                backgroundMusicSource.Stop();
+                backgroundMusicSource.clip = GameMusic;
+                backgroundMusicSource.Play();
+                break;
+            case GameState.VICTORY:
+            case GameState.GAMEOVER:
+
+                if(GameManager.Instance.CurrentState == GameState.GAMEOVER)
+                {
+                    EatPacmanSfx();
+                }
                 backgroundMusicSource.Stop();
                 backgroundMusicSource.clip = GameMusic;
                 backgroundMusicSource.Play();
