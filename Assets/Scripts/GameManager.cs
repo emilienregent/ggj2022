@@ -138,6 +138,7 @@ public class GameManager
 
     public void DecreaseScore(int points)
     {
+        PelletCollected?.Invoke();
         Score = Mathf.Max(0, Score - points);
         OnScoreChangeAction();
     }
@@ -237,7 +238,6 @@ public class GameManager
     }
 
     public void ChangeState(GameState newState) {
-        Debug.Log("SWITCH TO STATE " + newState.ToString());
         CurrentState = newState;
         OnChangeStateHandler?.Invoke();
     }
