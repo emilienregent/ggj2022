@@ -76,10 +76,16 @@ Graphismes (intégration des assets)
 
 TODOS dernier jour :
 => [DONE] Fix condition de victoire (nombre de pastilles mangés incrémenté quand on mange un powerup)
-=> Faire en sorte que la vitesse de Blinky soit conservée que ce soit l'IA qui contrôle Blinky ou le joueur
-=> Ajouter un écran de Start disant "Aide Pac-Man à manger toutes les pastilles"
-=> Ajouter une pause avant de switch vers GameOver ou Victory
-=> Animation (LeanTween) sur l'apparition de la banière
+=> [DONE] Blinky ne devrait pas pouvoir rentrer dans la maison
+
+=> [Jérôme] IA Pac-Man :
+	=> Si moins de X pastilles, diminuer l'importance des chemins comportant des nodes déjà visités
+	=> Augmenter le poids du chemin s'il y a une pastille dans le prochain node sur la direction courante
+=> [Jérôme] Faire en sorte que la vitesse de Blinky soit conservée que ce soit l'IA qui contrôle Blinky ou le joueur (pas de diminution au respawn même si mangé)
+=> [Gaëtan] Ajouter une pause avant de switch vers GameOver ou Victory
+=> [Gaëtan] Ajouter un écran de Start disant "Aide Pac-Man à manger toutes les pastilles"
+=> [Gaëtan] Animation (LeanTween) sur l'apparition de la banière
+=> Animation sur le model qui est actuellement contrôlé
+=> Animation à la mort du Pac-Man (référence Mario)
 => Sound Effects
 => Music
-=> IA Pac-Man : Si moins de X pastilles, diminuer l'importance des chemins comportant des nodes déjà visités
