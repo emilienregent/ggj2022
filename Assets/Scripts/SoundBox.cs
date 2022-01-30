@@ -35,7 +35,7 @@ public class SoundBox : MonoBehaviour
     private void OnDestroy() {
         GameManager.Instance.OnChangeStateHandler -= UpdateSFX;
         GameManager.Instance.PelletCollected -= EatPelletSfx;
-        GameManager.Instance.PacmanDying += EatPacmanSfx;
+        GameManager.Instance.PacmanDying -= EatPacmanSfx;
         GameManager.Instance.PhantomDying -= EatGhostSfx;
     }
 

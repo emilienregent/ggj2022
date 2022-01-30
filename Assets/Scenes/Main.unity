@@ -877,6 +877,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1114095540578594659, guid: 52a67433b31bc6b4eba14cb0b108dbbd, type: 3}
+      propertyPath: m_Volume
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1114095540578594663, guid: 52a67433b31bc6b4eba14cb0b108dbbd, type: 3}
       propertyPath: m_Name
       value: SoundBox
