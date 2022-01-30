@@ -9,9 +9,10 @@ Phase de jeu Pac Man
 			=> [DONE] Poursuivre
 			=> [DONE] Scatter
 			=> [DONE] Fuir Pac Man
-		=> Modification des stats selon la progression de Pac Man (vitesse du fantôme rouge)
+		=> [RUNNING] Modification des stats selon la progression de Pac Man (vitesse du fantôme rouge)
+			=> Faire en sorte que la vitesse soit conservé que ce soit l'IA qui contrôle Blinky ou le joueur
 		=> [DONE] Manger le Pac Man
-			=> Condition de défaite (switch vers phase Fantôme)
+			=> [DONE] Condition de défaite (switch vers phase Fantôme)
 		=> [DONE] Spawn des fantômes
 	=> [Jérôme] Labyrinthe
 		=> [DONE] Intégration de blocs 3D pour construire le niveau de Pac Man
@@ -34,9 +35,9 @@ Phase de jeu Pac Man
 			=> [DONE] Possible de manger les fantômes
 	=> [Jérôme] Game Manager
 		=> [DONE] Comptage du score
-		=> Augmentation de la difficulté à mesure que le joueur se rapproche de la victoire
-			=> Impossibilié de gagner
-				=> Faire apparaître une pastille quand on en mange (passé un certain nombre)
+		=> [DONE] Augmentation de la difficulté à mesure que le joueur se rapproche de la victoire
+			=> [DONE] Impossibilié de gagner
+				=> [DONE] Faire apparaître une pastille quand on en mange (passé un certain nombre)
 Phase de jeu Fantôme
 	=> [DONE] Fantômes
 		=> [DONE] Reprendre la même chose que la phase Pac Man
@@ -71,3 +72,14 @@ Graphismes (intégration des assets)
 	=> Improve model fantômes
 		=> [DONE] à mettre à plat (allonger)
 		=> [TODO] bloquer la rotation en fonction de la direction
+
+
+TODOS dernier jour :
+=> [DONE] Fix condition de victoire (nombre de pastilles mangés incrémenté quand on mange un powerup)
+=> Faire en sorte que la vitesse de Blinky soit conservée que ce soit l'IA qui contrôle Blinky ou le joueur
+=> Ajouter un écran de Start disant "Aide Pac-Man à manger toutes les pastilles"
+=> Ajouter une pause avant de switch vers GameOver ou Victory
+=> Animation (LeanTween) sur l'apparition de la banière
+=> Sound Effects
+=> Music
+=> IA Pac-Man : Si moins de X pastilles, diminuer l'importance des chemins comportant des nodes déjà visités

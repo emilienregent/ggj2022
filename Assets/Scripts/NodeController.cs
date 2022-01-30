@@ -7,6 +7,10 @@ public class NodeController : MonoBehaviour
     private static uint NODE_ID = 1;
 
     public GameObject Center;
+    public bool AllowMoveUp = true;
+    public bool AllowMoveRight = true;
+    public bool AllowMoveDown = true;
+    public bool AllowMoveLeft = true;
 
     private NodeController _nodeUp;
     private NodeController _nodeRight;
@@ -14,10 +18,10 @@ public class NodeController : MonoBehaviour
     private NodeController _nodeLeft;
     private List<DirectionEnum> _directions = new List<DirectionEnum>();
 
-    public bool CanMoveUp { get { return HasDirection(DirectionEnum.Up); } }
-    public bool CanMoveRight { get { return HasDirection(DirectionEnum.Right); } }
-    public bool CanMoveDown { get { return HasDirection(DirectionEnum.Down); } }
-    public bool CanMoveLeft { get { return HasDirection(DirectionEnum.Left); } }
+    public bool CanMoveUp { get { return HasDirection(DirectionEnum.Up) && AllowMoveUp == true; } }
+    public bool CanMoveRight { get { return HasDirection(DirectionEnum.Right) && AllowMoveRight == true; } }
+    public bool CanMoveDown { get { return HasDirection(DirectionEnum.Down) && AllowMoveDown == true; } }
+    public bool CanMoveLeft { get { return HasDirection(DirectionEnum.Left) && AllowMoveLeft == true; } }
     public NodeController NodeUp { get => _nodeUp; set => _nodeUp = value; }
     public NodeController NodeRight { get => _nodeRight; set => _nodeRight = value; }
     public NodeController NodeDown { get => _nodeDown; set => _nodeDown = value; }
