@@ -27,7 +27,10 @@ public class PickupController : MonoBehaviour
             return;
         }
 
-        GameManager.Instance.CollectPellet(this);
+        if(_type == PickupType.Pellet)
+        {
+            GameManager.Instance.CollectPellet(this);
+        }
 
         if (GameManager.Instance.CurrentState == GameState.PACMAN)
         {
