@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour
@@ -64,8 +65,32 @@ public class HUDController : MonoBehaviour
                 GoalControllerBlinky.gameObject.SetActive(true);
                 StartCoroutine(AnimateGhostStateStart());
                 break;
+
+            case GameState.GAMEOVER:
+                StartCoroutine(AnimateGameOver());
+                break;
+
+            case GameState.VICTORY:
+                StartCoroutine(AnimateVictory());
+                break;
         }
         UpdateLifeDisplay();
+    }
+
+    private IEnumerator AnimateVictory()
+    {
+        GameManager.Instance.PauseGame();
+        yield return new WaitForSecondsRealtime(1);
+        GameManager.Instance.ResumeGame();
+        SceneManager.LoadScene("Victory");
+    }
+
+    private IEnumerator AnimateGameOver()
+    {
+        GameManager.Instance.PauseGame();
+        yield return new WaitForSecondsRealtime(1);
+        GameManager.Instance.ResumeGame();
+        SceneManager.LoadScene("GameOver");
     }
 
     private IEnumerator AnimatePacmanStateStart()

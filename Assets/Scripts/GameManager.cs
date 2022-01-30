@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Random = System.Random;
 
@@ -131,7 +130,6 @@ public class GameManager
         if(CurrentState == GameState.PACMAN && _collectedPelletsCounter == totalCountPellets)
         {
             ChangeState(GameState.GAMEOVER);
-            SceneManager.LoadScene("GameOver");
             return;
         }
     }
@@ -157,7 +155,6 @@ public class GameManager
         if (CurrentState == GameState.GHOST && _collectedPelletsCounter == (totalCountPellets))
         {
             ChangeState(GameState.VICTORY);
-            SceneManager.LoadScene("Victory");
             return;
         }
     }
@@ -198,7 +195,6 @@ public class GameManager
         if (LifesLeft <= 0)
         {
             ChangeState(GameState.GAMEOVER);
-            SceneManager.LoadScene("GameOver");
             return;
         }
 
