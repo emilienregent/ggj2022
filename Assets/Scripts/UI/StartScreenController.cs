@@ -32,9 +32,12 @@ public class StartScreenController : MonoBehaviour
     {
         if(GameManager.Instance.CurrentState == GameState.START)
         {
-            Wrapper.SetActive(true);
-            StartCoroutine(AnimateBlinky());
             GameManager.Instance.PauseGame();
+            Wrapper.SetActive(true);
+
+            // Animate Blinky
+            StartCoroutine(AnimateBlinky());
+
         } else if(GameManager.Instance.PreviousState == GameState.START)
         {
             StopAllCoroutines();

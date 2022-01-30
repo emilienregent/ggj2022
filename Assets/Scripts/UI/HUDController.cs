@@ -47,7 +47,7 @@ public class HUDController : MonoBehaviour
 
     private void UpdateScoreDisplay()
     {
-        Score.text = "Score : " + GameManager.Instance.Score.ToString("d5");
+        Score.text = GameManager.Instance.Score.ToString("d5");
     }
 
     private void ChangeHUDState()
@@ -56,13 +56,13 @@ public class HUDController : MonoBehaviour
         {
             case GameState.PACMAN:
                 GoalControllerBlinky.gameObject.SetActive(false);
-                GoalControllerPacMan.gameObject.SetActive(true);
+                GoalControllerPacMan.StartAnimation();
                 StartCoroutine(AnimatePacmanStateStart());
                 break;
 
             case GameState.GHOST:
                 GoalControllerPacMan.gameObject.SetActive(false);
-                GoalControllerBlinky.gameObject.SetActive(true);
+                GoalControllerBlinky.StartAnimation();
                 StartCoroutine(AnimateGhostStateStart());
                 break;
 
@@ -102,7 +102,7 @@ public class HUDController : MonoBehaviour
         GoalControllerPacMan.Goal.text = "Don't die !";
         yield return new WaitForSecondsRealtime(1);
         GameManager.Instance.ResumeGame();
-        GoalControllerPacMan.gameObject.SetActive(false);
+        GoalControllerPacMan.ResetScale();
     }
 
     private IEnumerator AnimateGhostStateStart()
@@ -114,7 +114,7 @@ public class HUDController : MonoBehaviour
         GoalControllerBlinky.Goal.text = "Eat Pac-Man !";
         yield return new WaitForSecondsRealtime(1);
         GameManager.Instance.ResumeGame();
-        GoalControllerBlinky.gameObject.SetActive(false);
+        GoalControllerBlinky.ResetScale();
 
     }
 
