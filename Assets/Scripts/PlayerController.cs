@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour
                 case DirectionEnum.Up:
                     SetNextDirectionUp();
                     break;
-
                 case DirectionEnum.Right:
                     SetNextDirectionRight();
                     break;
@@ -96,7 +95,6 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case GameState.GHOST:
-                Debug.Log(Blinky);
                 CurrentController = Blinky.gameObject;
                 LoadControllerComponents();
                 break;
